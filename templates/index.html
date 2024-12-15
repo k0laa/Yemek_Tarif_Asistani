@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yemek Tarif Asistanı</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.0.0/dist/full.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Yemek Tarif Asistanı</h1>
+        <form action="/find_recipe" method="post">
+            <input type="text" name="ingredients" placeholder="Malzemeleri girin (virgülle ayırın)" class="input input-bordered w-full mb-4">
+            <button type="submit" class="btn btn-primary">Tarif Bul</button>
+        </form>
+    </div>
+</body>
+</html>
