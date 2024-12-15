@@ -1,4 +1,4 @@
-import Spooncular as sp
+import Spoonacular as sp
 
 if __name__ == "__main__":
     ingredients = input("Hangi malzemelere sahipsiniz? (Virgülle ayırın): ")
