@@ -1,23 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarif Detayları</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.0.0/dist/full.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background-color: #1a202c; /* Koyu arka plan rengi */
+        }
+    </style>
 </head>
-<body>
-    <div class="container mx-auto p-4">
-        <h1 class="text-2xl font-bold mb-4">{{ recipe_details['title'] }}</h1>
+<body class="bg-base-100 dark:bg-gray-900 dark:text-white">
+    <div class="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow-lg rounded-lg text-center">
+        <h1 class="text-3xl font-bold mb-4">{{ recipe_details['title'] }}</h1>
         <h2 class="text-xl font-semibold">Malzemeler:</h2>
-        <ul>
+        <ul class="list-disc list-inside text-left mx-auto w-full">
             {% for ingredient in recipe_details['extendedIngredients'] %}
                 <li>{{ ingredient['original'] }}</li>
             {% endfor %}
         </ul>
         <h2 class="text-xl font-semibold mt-4">Adımlar:</h2>
-        <p>{{ recipe_details['instructions'] }}</p>
-        <a href="/" class="btn btn-secondary mt-4">Geri Dön</a>
+        <p class="text-left mx-auto w-full">{{ recipe_details['instructions'] }}</p>
+        <div class="flex justify-center mt-4">
+            <a href="/" class="btn btn-secondary">Geri Dön</a>
+        </div>
     </div>
 </body>
 </html>
