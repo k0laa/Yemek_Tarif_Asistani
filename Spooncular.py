@@ -17,3 +17,7 @@ def find_recipe(ingredients):
     return recipes
 
 
+def print_recipe_id(recipes):
+    print("\nBulunan Tarifler:")
+    for idx, recipe in enumerate(recipes, 1):
+        print(f"{idx}. {recipe['title']} (ID: {recipe['id']})")
