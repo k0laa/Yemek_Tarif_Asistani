@@ -28,3 +28,15 @@ def get_recipe_details(recipe_id):
     response = requests.get(details_url, params={"apiKey": api_key})
     recipe_details = response.json()
     return recipe_details
+
+
+def print_recipe_details(recipe_details):
+    # Tarifin malzemeleri ve adımları
+    print(f"\nTarif Adı: {recipe_details['title']}")
+    print("Malzemeler:")
+    for ingredient in recipe_details['extendedIngredients']:
+        print(f"- {ingredient['original']}")
+
+    print("\nAdımlar:")
+    instructions = recipe_details.get('instructions', 'Adımlar bulunamadı.')
+    print(instructions)
