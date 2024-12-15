@@ -6,3 +6,4 @@ translator = deepl.Translator(auth_key)
 def translate(text, source_lang, target_lang):
     response = translator.translate_text(text, source_lang=source_lang, target_lang=target_lang)
     return response
+
