@@ -45,5 +45,7 @@ def print_recipe_details(recipe_details):
 
     print("\nAdımlar:")
     instructions = recipe_details.get('instructions', 'Adımlar bulunamadı.')
-    instructions_tr = dl.translate(instructions, 'EN', 'TR')
+    soup = BeautifulSoup(instructions, "html.parser")
+    instructions_text = soup.get_text(separator="\n")  # Her bir maddeyi yeni satırda yazdırır
+    instructions_tr = dl.translate(instructions_text, 'EN', 'TR')
     print(instructions_tr)
