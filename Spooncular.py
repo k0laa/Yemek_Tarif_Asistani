@@ -21,3 +21,10 @@ def print_recipe_id(recipes):
     print("\nBulunan Tarifler:")
     for idx, recipe in enumerate(recipes, 1):
         print(f"{idx}. {recipe['title']} (ID: {recipe['id']})")
+
+
+def get_recipe_details(recipe_id):
+    details_url = f"{base_url}{recipe_id}/information"
+    response = requests.get(details_url, params={"apiKey": api_key})
+    recipe_details = response.json()
+    return recipe_details
