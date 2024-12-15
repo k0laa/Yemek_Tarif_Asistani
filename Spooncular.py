@@ -25,6 +25,8 @@ def print_recipe_id(recipes):
     for idx, recipe in enumerate(recipes, 1):
         title_tr = dl.translate(recipe['title'], 'EN', 'TR')
         print(f"{idx}. {title_tr} (ID: {recipe['id']})")
+        image_url = recipe.get('image', 'No image available')
+        print(f"Image: {image_url}")
 
 
 def get_recipe_details(recipe_id):
