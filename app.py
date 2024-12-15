@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
 import Spoonacular as sp
 import DeepL as dl
@@ -22,8 +23,12 @@ def recipe_details(recipe_id):
     recipe_details = sp.get_recipe_details(recipe_id)
     for ingredient in recipe_details['extendedIngredients']:
         ingredient['original'] = dl.translate(ingredient['original'], 'EN', 'TR')
-    recipe_details['instructions'] = dl.translate(recipe_details['instructions'], 'EN', 'TR')
     recipe_details['title'] = dl.translate(recipe_details['title'], 'EN', 'TR')
+
+    soup = BeautifulSoup(recipe_details['instructions'], "html.parser")
+    instructions_text = soup.get_text(separator="\n")  # Her bir maddeyi yeni satırda yazdırır
+    recipe_details['instructions'] = dl.translate(instructions_text, 'EN', 'TR')
+
     return render_template('recipe_details.html', recipe_details=recipe_details)
 
 if __name__ == '__main__':
