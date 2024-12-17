@@ -6,6 +6,7 @@ api_key = "83b2b1202ace49ebb26496ac998fedb4"  ##günlük kota 150
 base_url = "https://api.spoonacular.com/recipes/"
 
 
+# Gelen malzemerlere göre 5 tane tarif bulur
 def find_recipe(ingredients):
     ingredients_en = dl.translate(ingredients, 'TR', 'EN-US')
     # API'ye tarif bulma isteği gönder
@@ -20,6 +21,15 @@ def find_recipe(ingredients):
     return recipes
 
 
+# ID si gelen tarifin detaylarını getirir
+def get_recipe_details(recipe_id):
+    details_url = f"{base_url}{recipe_id}/information"
+    response = requests.get(details_url, params={"apiKey": api_key})
+    recipe_details = response.json()
+    return recipe_details
+
+
+# Bulanan tarifleri konsola yazdırır (main.py için)
 def print_recipe_id(recipes):
     print("\nBulunan Tarifler:")
     for idx, recipe in enumerate(recipes, 1):
@@ -29,13 +39,7 @@ def print_recipe_id(recipes):
         print(f"Image: {image_url}")
 
 
-def get_recipe_details(recipe_id):
-    details_url = f"{base_url}{recipe_id}/information"
-    response = requests.get(details_url, params={"apiKey": api_key})
-    recipe_details = response.json()
-    return recipe_details
-
-
+# Tarifin detaylarını konsola yazdırır (main.py için)
 def print_recipe_details(recipe_details):
     # Tarifin malzemeleri ve adımları
     title_tr = dl.translate(recipe_details['title'], 'EN', 'TR')
