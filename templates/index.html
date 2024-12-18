@@ -118,14 +118,18 @@
             }
         }
 
-        function getRecipes() {
-            const ingredients = Array.from(document.querySelectorAll('.ingredient')).map(input => input.value.trim());
-            if (ingredients.length > 0) {
-                alert('Tarifler hazırlanıyor: ' + ingredients.join(', '));
-            } else {
-                alert('Lütfen malzemeleri giriniz!');
-            }
-        }
+       function getRecipes() {
+    const ingredients = Array.from(document.querySelectorAll('.ingredient')).map(input => input.value.trim());
+    if (ingredients.length > 0) {
+        const ingredientsParam = encodeURIComponent(ingredients.join(','));
+        window.location.href = `recipes.html?ingredients=${ingredientsParam}`;
+    } else {
+        alert('Lütfen malzemeleri giriniz!');
+    }
+}
+
     </script>
 </body>
 </html>
+
+
