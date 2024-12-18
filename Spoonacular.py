@@ -13,7 +13,7 @@ def find_recipe(ingredients):
     search_url = f"{base_url}findByIngredients"  #
     params = {
         "ingredients": ingredients_en,
-        "number": 5,  # Gösterilecek tarif sayısı
+        "number": 4,  # Gösterilecek tarif sayısı
         "apiKey": api_key
     }
     response = requests.get(search_url, params=params)
