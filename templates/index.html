@@ -1,30 +1,131 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yemek Tarif Asistanı</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.0.0/dist/full.css" rel="stylesheet">
+    <title>Recipe Bot</title>
     <style>
-        html, body {
-            height: 100%;
-        }
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: Arial, sans-serif;
             margin: 0;
-            background-color: #1a202c; /* Koyu arka plan rengi */
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        h1 {
+            color: #fff;
+            font-size: 3rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        input[type="number"], .ingredients {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .ingredients {
+            display: none;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+        button {
+            background: #ff7675;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #e84118;
         }
     </style>
 </head>
-<body class="bg-base-100 dark:bg-gray-900 dark:text-white">
-    <div class="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow-lg rounded-lg text-center">
-        <h1 class="text-3xl font-bold mb-4">Yemek Tarif Asistanı</h1>
-        <form action="/find_recipe" method="post" class="flex flex-col items-center">
-            <input type="text" name="ingredients" placeholder="Malzemeleri girin (virgülle ayırın)" class="input input-bordered w-full mb-4">
-            <button type="submit" class="btn btn-primary w-full">Tarif Bul</button>
-        </form>
+<body>
+    <h1 id="title">Yemek Tarifi Botu</h1>
+    <div class="container">
+        <label for="ingredientCount" id="ingredientCountLabel">Malzeme Sayısını Giriniz:</label>
+        <input type="number" id="ingredientCount" min="1" max="500" placeholder="Örneğin: 3">
+        <div id="ingredientInputs" class="ingredients"></div>
+        <button id="createButton" onclick="generateInputs()">Kutucukları Oluştur</button>
+        <button id="fetchButton" onclick="getRecipes()">Tarifleri Getir</button>
     </div>
+
+    <script>
+        // Bu fonksiyon sayfa yüklenince tüm metinleri Türkçe yapacak
+        function setButtonText() {
+            const userLang = navigator.language || navigator.userLanguage;
+            const createButton = document.getElementById('createButton');
+            const fetchButton = document.getElementById('fetchButton');
+            const title = document.getElementById('title');
+            const ingredientCountLabel = document.getElementById('ingredientCountLabel');
+
+            // Tüm metinleri Türkçe yapıyoruz
+            title.textContent = "Yemek Tarifi Botu";
+            ingredientCountLabel.textContent = "Malzeme Sayısını Giriniz:";
+            createButton.textContent = "Kutucukları Oluştur";  // Buton metnini burada sabitliyoruz
+            fetchButton.textContent = "Tarifleri Getir";
+        }
+
+        window.onload = setButtonText; // Sayfa yüklendiğinde metinlerin güncellenmesini sağlıyoruz
+
+        function generateInputs() {
+            const count = parseInt(document.getElementById('ingredientCount').value);
+            const container = document.getElementById('ingredientInputs');
+
+            if (count > 500) {
+                alert("En fazla 500 malzeme girebilirsiniz.");
+                return;
+            }
+
+            container.innerHTML = ''; // Var olan inputları temizliyoruz
+
+            if (!isNaN(count) && count > 0) {
+                container.style.display = 'block';
+                for (let i = 0; i < count; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.placeholder = `Malzeme ${i + 1}`;
+                    input.className = 'ingredient';
+                    container.appendChild(input);
+                }
+            }
+        }
+
+        function getRecipes() {
+            const ingredients = Array.from(document.querySelectorAll('.ingredient')).map(input => input.value.trim());
+            if (ingredients.length > 0) {
+                alert('Tarifler hazırlanıyor: ' + ingredients.join(', '));
+            } else {
+                alert('Lütfen malzemeleri giriniz!');
+            }
+        }
+    </script>
 </body>
 </html>
