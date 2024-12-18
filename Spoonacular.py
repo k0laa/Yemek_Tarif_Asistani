@@ -82,7 +82,7 @@ def print_recipe_details(recipe_details):
     print(instructions_tr)
 
 
-def load_api_keys(filename="SPOONACULAR_APİ_KEYS.txt"):
+def load_api_keys(filename="SPOONACULAR_API_KEYS.txt"):
     with open(filename, 'r') as file:
         api_keys = [line.strip() for line in file.readlines()]
     return api_keys
