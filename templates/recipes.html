@@ -1,127 +1,124 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8"> <!-- Sayfanın karakter setini UTF-8 olarak ayarlıyoruz. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Sayfanın mobil uyumlu olması için viewport ayarları. -->
-    <title>Recise Bot</title> <!-- Sayfa başlığı -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recise Bot</title>
     <style>
-        /* Sayfanın stilini burada belirliyoruz */
         body {
-            font-family: Arial, sans-serif;  /* Font ailesini ayarlıyoruz */
-            margin: 0;  /* Sayfa kenarlarından boşluk bırakmıyoruz */
-            padding: 0;  /* Sayfanın padding (iç boşluk) özelliğini sıfırlıyoruz */
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4); /* Sayfa arka plan rengini linear gradient ile değiştiriyoruz */
-            min-height: 100vh; /* Sayfanın tam ekran yüksekliğine ulaşmasını sağlıyoruz */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            min-height: 100vh;
         }
 
         h1 {
-            text-align: center;  /* Başlığı ortaya hizalıyoruz */
-            margin: 20px;  /* Başlığa dış boşluk ekliyoruz */
-            color: white;  /* Başlık rengini beyaz yapıyoruz */
+            text-align: center;
+            margin: 20px;
+            color: white;
         }
 
         .loading-message {
-            position: fixed;  /* Sayfanın ortasında sabit kalsın */
-            top: 50%;  /* Yüksekliğini ortalıyoruz */
-            left: 50%;  /* Yatayda ortalıyoruz */
-            transform: translate(-50%, -50%);  /* Gerçekten ortalamak için */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             font-size: 1.5em;
             color: white;
-            background-color: rgba(0, 0, 0, 0.5);  /* Yarı şeffaf bir arka plan */
+            background-color: rgba(0, 0, 0, 0.5);
             padding: 20px;
             border-radius: 10px;
-            z-index: 10;  /* Mesajın üstte görünmesini sağlıyoruz */
+            z-index: 10;
         }
 
         .recipes-container {
-            display: flex;  /* Tarife kartlarını yatayda sıralamak için Flexbox kullanıyoruz */
-            flex-wrap: wrap;  /* Kartların sarmasını sağlıyoruz */
-            justify-content: center;  /* Kartları ortalamak için center hizalıyoruz */
-            gap: 20px;  /* Kartlar arasına 20px boşluk bırakıyoruz */
-            padding-top: 50px;  /* Yüksekliği başlıkla uyumlu hale getirmek için boşluk bırakıyoruz */
-            filter: blur(5px);  /* Sayfanın geri kalan kısmını bulanık yapıyoruz */
-            transition: filter 0.3s ease;  /* Bulanıklık efektinin geçişini yumuşatıyoruz */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding-top: 50px;
+            filter: blur(5px);
+            transition: filter 0.3s ease;
         }
 
         .recipe-card {
-            background-color: white;  /* Tarif kartlarının arka plan rengini beyaz yapıyoruz */
-            border-radius: 8px;  /* Köşeleri yuvarlatıyoruz */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Kartlara gölge ekliyoruz */
-            width: 300px;  /* Kartların genişliğini 300px yapıyoruz */
-            padding: 15px;  /* Kartların içindeki boşluğu ayarlıyoruz */
-            text-align: center;  /* Kart içeriğini ortalıyoruz */
-            margin-top: 20px;  /* Kartların üst kısmına boşluk ekliyoruz */
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 20px;
         }
 
         .recipe-card img {
-            width: 100%;  /* Resmi kartın tamamını kaplayacak şekilde boyutlandırıyoruz */
-            height: auto;  /* Yüksekliği otomatik ayarlıyoruz, orantılı kalmasını sağlıyoruz */
-            border-radius: 8px;  /* Resmin köşelerini yuvarlatıyoruz */
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
         }
 
         .recipe-card h3 {
-            font-size: 1.2em;  /* Başlık font boyutunu ayarlıyoruz */
-            margin: 20px 0;  /* Başlık çevresine boşluk ekliyoruz */
+            font-size: 1.2em;
+            margin: 20px 0;
         }
 
         .recipe-card .difficulty,
         .recipe-card .time {
-            font-size: 1em;  /* Zorluk ve süre yazılarının font boyutunu ayarlıyoruz */
-            margin: 10px 0;  /* Aralarına boşluk ekliyoruz */
-            color: #333;  /* Rengini koyu gri yapıyoruz */
+            font-size: 1em;
+            margin: 10px 0;
+            color: #333;
         }
 
         .recipe-card .difficulty {
             font-weight: bold;
-            color: #FF6347; /* Zorluk seviyesini kırmızı renkte yapıyoruz */
+            color: #FF6347;
         }
 
         .recipe-card .time {
             font-weight: bold;
-            color: #C1CFA1; /* Yapılma süresini turuncu renkte yapıyoruz */
+            color: #C1CFA1;
         }
 
         .recipe-card a {
-            display: inline-block;  /* Bağlantıyı satır içi blok eleman olarak gösteriyoruz */
-            margin-top: 10px;  /* Bağlantıya üst boşluk ekliyoruz */
-            padding: 10px 15px;  /* Bağlantıya iç boşluk ekliyoruz */
-            background-color: #FB9EC6;  /* Bağlantıya mavi arka plan rengi ekliyoruz */
-            color: white;  /* Bağlantının metin rengini beyaz yapıyoruz */
-            text-decoration: none;  /* Bağlantı altını çizmemek için kaldırıyoruz */
-            border-radius: 5px;  /* Bağlantıya yuvarlak köşe veriyoruz */
-            font-size: 1em;  /* Bağlantı metninin font boyutunu ayarlıyoruz */
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #FB9EC6;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
         }
 
         .recipe-card a:hover {
-            background-color: #FFCCE1;  /* Bağlantının üzerine gelindiğinde rengini değiştiriyoruz */
+            background-color: #FFCCE1;
         }
 
-        /* Yükleniyor mesajı kaybolduğunda sayfa bulanıklığını kaldır */
         .recipes-container.no-blur {
             filter: none;
         }
     </style>
 </head>
 <body>
-    <div class="loading-message" id="loadingMessage">Tarifler yükleniyor...</div> <!-- Yükleniyor mesajı -->
-    <h1>İşte Bulunan Tarifler</h1>  <!-- Başlık: Bulunan Tarifler -->
-    <div class="recipes-container" id="recipesContainer">  <!-- Tarif kartlarının bulunduğu kapsayıcı -->
-        {% for recipe in recipes %}  <!-- Python'dan gelen 'recipes' verisini döngüyle gezerek her bir tarif için bir kart oluşturuyoruz -->
-            <div class="recipe-card">  <!-- Her tarif için bir kart -->
-                <img src="{{ recipe['image'] }}" alt="{{ recipe['title'] }}">  <!-- Tarifin resmini ve alt metnini yerleştiriyoruz -->
-                <h3>{{ recipe['title'] }}</h3>  <!-- Tarifin başlığını yazdırıyoruz -->
-                <p class="difficulty">Zorluk: {{ recipe['difficulty'] }}</p>  <!-- Tarifin zorluk seviyesini yazdırıyoruz -->
-                <p class="time">Yapılma Süresi: {{ recipe['time'] }} dakika</p>  <!-- Tarifin yapılma süresini yazdırıyoruz -->
-                <a href="{{ recipe['sourceUrl'] }}" target="_blank">Tarifi Görüntüle</a>  <!-- Tarife ait bağlantıyı ekliyoruz -->
+    <div class="loading-message" id="loadingMessage">Tarifler yükleniyor...</div>
+    <h1>İşte Bulunan Tarifler</h1>
+    <div class="recipes-container" id="recipesContainer">
+        {% for recipe in recipes %}
+            <div class="recipe-card">
+                <img src="{{ recipe['image'] }}" alt="{{ recipe['title'] }}">
+                <h3>{{ recipe['title'] }}</h3>
+                <p class="difficulty">Zorluk: {{ recipe['difficulty'] }}</p>
+                <p class="time">Yapılma Süresi: {{ recipe['time'] }} dakika</p>
+                <a href="{{ recipe['sourceUrl'] }}" target="_blank">Tarifi Görüntüle</a>
             </div>
-        {% endfor %}  <!-- Döngü sonlanıyor -->
+        {% endfor %}
     </div>
 
     <script>
-        // Sayfa yüklendiğinde sadece yükleniyor mesajını gizleriz, başlık kalır ve tarifler net görünür
         window.onload = function() {
-            document.getElementById('loadingMessage').style.display = 'none'; // Yükleniyor mesajını gizle
-            document.getElementById('recipesContainer').classList.add('no-blur'); // Tarifler bölmesini netleştir
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('recipesContainer').classList.add('no-blur');
         };
     </script>
 </body>
