@@ -27,19 +27,19 @@ def find_recipe():
 @app.route('/recipe_details/<int:recipe_id>')
 def recipe_details(recipe_id):
     # tarif detaylarını getirir
-    recipe_detail = sp.get_recipe_details(recipe_id)
+    recipe_details = sp.get_recipe_details(recipe_id)
 
     # tarif detaylarını çevirir
-    for ingredient in recipe_detail['extendedIngredients']:
+    for ingredient in recipe_details['extendedIngredients']:
         ingredient['original'] = dl.translate(ingredient['original'], 'EN', 'TR')
-    recipe_detail['title'] = dl.translate(recipe_detail['title'], 'EN', 'TR')
+    recipe_details['title'] = dl.translate(recipe_details['title'], 'EN', 'TR')
 
     # tarif adımlarını çevirir
-    soup = BeautifulSoup(recipe_detail['instructions'], "html.parser")
+    soup = BeautifulSoup(recipe_details['instructions'], "html.parser")
     instructions_text = soup.get_text(separator="\n")  # Her bir maddeyi yeni satırda yazdırır
-    recipe_detail['instructions'] = dl.translate(instructions_text, 'EN', 'TR')
+    recipe_details['instructions'] = dl.translate(instructions_text, 'EN', 'TR')
 
-    return render_template('recipe_details.html', recipe_detail=recipe_detail)
+    return render_template('recipe_details.html', recipe_details=recipe_details)
 
 
 if __name__ == '__main__':
