@@ -16,11 +16,13 @@
             height: 100vh;
             background: linear-gradient(135deg, #ff9a9e, #fad0c4);
         }
+
         h1 {
             color: #fff;
             font-size: 3rem;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
         }
+
         .container {
             background: #ffffff;
             padding: 20px;
@@ -32,12 +34,14 @@
             box-sizing: border-box;
             overflow: hidden;
         }
+
         label {
             display: block;
             margin: 10px 0 5px;
             font-size: 1.1rem;
             color: #555;
         }
+
         input[type="number"], .ingredients {
             width: calc(100% - 20px);
             padding: 10px;
@@ -47,11 +51,13 @@
             font-size: 1rem;
             box-sizing: border-box;
         }
+
         .ingredients {
             display: none;
             overflow-y: auto;
             max-height: 300px;
         }
+
         button {
             background: #ff7675;
             color: #fff;
@@ -62,73 +68,84 @@
             font-size: 1rem;
             margin-top: 10px;
         }
+
         button:hover {
             background: #e84118;
         }
     </style>
 </head>
 <body>
-    <h1 id="title">Yemek Tarifi Botu</h1>
-    <div class="container">
-        <label for="ingredientCount" id="ingredientCountLabel">Malzeme Sayısını Giriniz:</label>
-        <input type="number" id="ingredientCount" min="1" max="500" placeholder="Örneğin: 3">
-        <div id="ingredientInputs" class="ingredients"></div>
-        <button id="createButton" onclick="generateInputs()">Kutucukları Oluştur</button>
-        <button id="fetchButton" onclick="getRecipes()">Tarifleri Getir</button>
-    </div>
+<h1 id="title">Yemek Tarifi Botu</h1>
+<div class="container">
+    <label for="ingredientCount" id="ingredientCountLabel">Malzeme Sayısını Giriniz:</label>
+    <input type="number" id="ingredientCount" min="1" max="500" placeholder="Örneğin: 3">
+    <div id="ingredientInputs" class="ingredients"></div>
+    <button id="createButton" onclick="generateInputs()">Kutucukları Oluştur</button>
+    <button id="fetchButton" onclick="getRecipes()">Tarifleri Getir</button>
+</div>
 
-    <script>
-        // Bu fonksiyon sayfa yüklenince tüm metinleri Türkçe yapacak
-        function setButtonText() {
-            const userLang = navigator.language || navigator.userLanguage;
-            const createButton = document.getElementById('createButton');
-            const fetchButton = document.getElementById('fetchButton');
-            const title = document.getElementById('title');
-            const ingredientCountLabel = document.getElementById('ingredientCountLabel');
+<script>
+    // Bu fonksiyon sayfa yüklenince tüm metinleri Türkçe yapacak
+    function setButtonText() {
+        const userLang = navigator.language || navigator.userLanguage;
+        const createButton = document.getElementById('createButton');
+        const fetchButton = document.getElementById('fetchButton');
+        const title = document.getElementById('title');
+        const ingredientCountLabel = document.getElementById('ingredientCountLabel');
 
-            // Tüm metinleri Türkçe yapıyoruz
-            title.textContent = "Yemek Tarifi Botu";
-            ingredientCountLabel.textContent = "Malzeme Sayısını Giriniz:";
-            createButton.textContent = "Kutucukları Oluştur";  // Buton metnini burada sabitliyoruz
-            fetchButton.textContent = "Tarifleri Getir";
+        // Tüm metinleri Türkçe yapıyoruz
+        title.textContent = "Yemek Tarifi Botu";
+        ingredientCountLabel.textContent = "Malzeme Sayısını Giriniz:";
+        createButton.textContent = "Kutucukları Oluştur";  // Buton metnini burada sabitliyoruz
+        fetchButton.textContent = "Tarifleri Getir";
+    }
+
+    window.onload = setButtonText; // Sayfa yüklendiğinde metinlerin güncellenmesini sağlıyoruz
+
+    function generateInputs() {
+        const count = parseInt(document.getElementById('ingredientCount').value);
+        const container = document.getElementById('ingredientInputs');
+
+        if (count > 500) {
+            alert("En fazla 500 malzeme girebilirsiniz.");
+            return;
         }
 
-        window.onload = setButtonText; // Sayfa yüklendiğinde metinlerin güncellenmesini sağlıyoruz
+        container.innerHTML = ''; // Var olan inputları temizliyoruz
 
-        function generateInputs() {
-            const count = parseInt(document.getElementById('ingredientCount').value);
-            const container = document.getElementById('ingredientInputs');
-
-            if (count > 500) {
-                alert("En fazla 500 malzeme girebilirsiniz.");
-                return;
-            }
-
-            container.innerHTML = ''; // Var olan inputları temizliyoruz
-
-            if (!isNaN(count) && count > 0) {
-                container.style.display = 'block';
-                for (let i = 0; i < count; i++) {
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.placeholder = `Malzeme ${i + 1}`;
-                    input.className = 'ingredient';
-                    container.appendChild(input);
-                }
+        if (!isNaN(count) && count > 0) {
+            container.style.display = 'block';
+            for (let i = 0; i < count; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = `Malzeme ${i + 1}`;
+                input.className = 'ingredient';
+                container.appendChild(input);
             }
         }
+    }
 
-       function getRecipes() {
+    function getRecipes() {
     const ingredients = Array.from(document.querySelectorAll('.ingredient')).map(input => input.value.trim());
     if (ingredients.length > 0) {
-        const ingredientsParam = encodeURIComponent(ingredients.join(','));
-        window.location.href = `recipes.html?ingredients=${ingredientsParam}`;
+        const form = document.createElement('form');
+        form.action = '/find_recipe';
+        form.method = 'post';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'ingredients';
+        input.value = ingredients.join(', ');
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
     } else {
         alert('Lütfen malzemeleri giriniz!');
     }
 }
 
-    </script>
+</script>
 </body>
 </html>
 
