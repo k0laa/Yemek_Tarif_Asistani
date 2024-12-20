@@ -22,12 +22,15 @@ def find_recipe():
 
     ingredients_form = request.form['ingredients']  # Formdan gelen malzemeleri alır
 
-    if ingredients_form != ingredients:  # sayfa yenilendiğinde aynı malzemeleri tekrar aramamak için
+    if ingredients_form != ingredients:  # sayfa yenilendiğinde aynı malzemeleri tekrar aramamak için kontrol
         finded_recipes_details.clear()
         ingredients = ingredients_form
+
         recipes = sp.find_recipe(ingredients)  # Malzemelere göre tarif arar
-        for recipe in recipes:  #
-            details = sp.get_recipe_details(recipe['id'])  # Tarif detaylarını getirir
+        recipe_ids = ', '.join(str(recipe['id']) for recipe in recipes)  # Tariflerin ID'lerini alır
+        recipes_details = sp.get_multi_recipe_details(recipe_ids)  # ID si gelen tariflerin detaylarını getirir
+
+        for details in recipes_details:
             details['title'] = dl.translate(details['title'], 'EN', 'TR')  # Detaylardaki başlığı çevirir
             finded_recipes_details.append(details)
 
