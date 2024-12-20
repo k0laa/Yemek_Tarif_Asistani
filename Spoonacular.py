@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 base_url = "https://api.spoonacular.com/recipes/"
 
 
+# Malzemelere göre tarif arar
 def find_recipe(ingredients):
     api_keys = load_api_keys()
     for api_key in api_keys:
@@ -16,11 +17,24 @@ def find_recipe(ingredients):
     return None
 
 
+# ID si gelen tarifin detaylarını getirir
 def get_recipe_details(recipe_id):
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
         details = get_recipe_details_from_api(api_key, recipe_id)
+        if details is not None:
+            return details
+
+    return None
+
+
+# ID si gelen tariflerin detaylarını getirir
+def get_multi_recipe_details(recipe_ids):
+    api_keys = load_api_keys()
+    for api_key in api_keys:
+        # API ile tarif aramasını dene
+        details = get_multi_recipe_details_from_api(api_key, recipe_ids)
         if details is not None:
             return details
 
@@ -48,6 +62,20 @@ def get_recipe_from_api(api_key, ingredients):
 def get_recipe_details_from_api(api_key, recipe_id):
     details_url = f"{base_url}{recipe_id}/information"
     response = requests.get(details_url, params={"apiKey": api_key})
+
+    if response.status_code == 402:
+        return None
+    return response.json()
+
+
+# ID si gelen tarifin detaylarını getirir
+def get_multi_recipe_details_from_api(api_key, recipe_ids):
+    details_url = f"{base_url}informationBulk"
+    params = {
+        "ids": recipe_ids,
+        "apiKey": api_key
+    }
+    response = requests.get(details_url, params=params)
 
     if response.status_code == 402:
         return None
@@ -82,6 +110,7 @@ def print_recipe_details(recipe_details):
     print(instructions_tr)
 
 
+# API keyleri dosyadan okur
 def load_api_keys(filename="SPOONACULAR_API_KEYS.txt"):
     with open(filename, 'r') as file:
         api_keys = [line.strip() for line in file.readlines()]
