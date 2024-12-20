@@ -3,6 +3,7 @@ import DeepL as dl
 from bs4 import BeautifulSoup
 
 base_url = "https://api.spoonacular.com/recipes/"
+recipe_count = 4
 
 
 # Malzemelere göre tarif arar
@@ -13,6 +14,18 @@ def find_recipe(ingredients):
         recipes = get_recipe_from_api(api_key, ingredients)
         if recipes is not None:
             return recipes
+
+    return None
+
+
+# Rastgele bir tarif arar
+def find_random_recipe(include_tags, exclude_tags):
+    api_keys = load_api_keys()
+    for api_key in api_keys:
+        # API ile tarif aramasını dene
+        details = find_random_recipe_from_api(api_key, include_tags, exclude_tags)
+        if details is not None:
+            return details
 
     return None
 
@@ -41,13 +54,13 @@ def get_multi_recipe_details(recipe_ids):
     return None
 
 
-# Gelen malzemerlere göre 4 tane tarif bulur
+# Malzemelere göre tarif arar
 def get_recipe_from_api(api_key, ingredients):
     ingredients_en = dl.translate(ingredients, 'TR', 'EN-US')
     search_url = f"{base_url}findByIngredients"
     params = {
         "ingredients": ingredients_en,
-        "number": 4,
+        "number": recipe_count,
         "apiKey": api_key
     }
     response = requests.get(search_url, params=params)
@@ -56,6 +69,23 @@ def get_recipe_from_api(api_key, ingredients):
     if response.status_code == 402:
         return None
     return response.json()
+
+
+# Rastgele bir tarif arar
+def find_random_recipe_from_api(api_key, include_tags, exclude_tags):
+    random_url = f"{base_url}random"
+    params = {
+        "includeNutrition": True,
+        "include-tags": include_tags,
+        "exclude-tags": exclude_tags,
+        "number": recipe_count,
+        "apiKey": api_key
+    }
+    response = requests.get(random_url, params=params)
+
+    if response.status_code == 402:
+        return None
+    return response.json()['recipes']
 
 
 # ID si gelen tarifin detaylarını getirir
