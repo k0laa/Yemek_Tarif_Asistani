@@ -3,7 +3,7 @@ from flask import Flask, render_template, request
 import Spoonacular as sp
 import DeepL as dl
 
-finded_recipes_details = []
+finded_recipes_details, translated_recipes = [], []
 ingredients = ''
 
 app = Flask(__name__)
@@ -53,6 +53,10 @@ def recipe_details(recipe_id):
     if recipe_details is None:
         return "Tarif bulunamadı", 404
 
+    # Tarif daha önce çevrildiyse tekrar çevirme
+    if recipe_details['id'] in translated_recipes:
+        return render_template('recipe_details.html', recipe_details=recipe_details)
+
     # Malzeme açıklamalarını çevir
     for ingredient in recipe_details.get('extendedIngredients', []):
         ingredient['original'] = dl.translate(ingredient['original'], 'EN', 'TR')
@@ -63,6 +67,8 @@ def recipe_details(recipe_id):
         instructions_text = soup.get_text(separator="\n")
         recipe_details['instructions'] = dl.translate(instructions_text, 'EN', 'TR')
 
+    # Tarifin daha önce çevrildiğini belirt
+    translated_recipes.append(recipe_details['id'])
     return render_template('recipe_details.html', recipe_details=recipe_details)
 
 
