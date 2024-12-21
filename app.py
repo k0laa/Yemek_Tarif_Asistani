@@ -43,11 +43,13 @@ def recipe_details(recipe_id):
     recipe_id = int(recipe_id)
     global finded_recipes_details, translated_recipes
     recipe_details = None
+    translated = False
 
     # İlgili tarifin detaylarını bul
     for recipe in translated_recipes:
         if recipe['id'] == recipe_id:
             recipe_details = recipe.copy()
+            translated = True
             break
 
     # İlgili tarifin detaylarını bul
@@ -60,7 +62,7 @@ def recipe_details(recipe_id):
         return "Tarif bulunamadı", 404
 
     # Tarif daha önce çevrildiyse tekrar çevirme
-    if recipe_details['id'] in translated_recipes:
+    if translated:
         return render_template('recipe_details.html', recipe_details=recipe_details)
 
     # Malzeme açıklamalarını çevir
@@ -84,7 +86,7 @@ def recipe_details(recipe_id):
             ingredient['name'] = dl.translate(ingredient['name'], 'EN', 'TR')
 
     # Tarifin daha önce çevrildiğini belirt
-    translated_recipes.append(recipe_details['id'])
+    translated_recipes.append(recipe_details)
     return render_template('recipe_details.html', recipe_details=recipe_details)
 
 
