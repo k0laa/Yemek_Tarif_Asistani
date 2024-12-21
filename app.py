@@ -47,12 +47,8 @@ def recipe_details(recipe_id):
     # İlgili tarifin detaylarını bul
     for recipe in translated_recipes:
         if recipe['id'] == recipe_id:
-            recipe_details = recipe
+            recipe_details = recipe.copy()
             break
-
-    # Tarif daha önce çevrildiyse tekrar çevirme
-    if recipe_details['id'] in translated_recipes:
-        return render_template('recipe_details.html', recipe_details=recipe_details)
 
     # İlgili tarifin detaylarını bul
     for recipe in finded_recipes_details:
@@ -62,6 +58,10 @@ def recipe_details(recipe_id):
 
     if recipe_details is None:
         return "Tarif bulunamadı", 404
+
+    # Tarif daha önce çevrildiyse tekrar çevirme
+    if recipe_details['id'] in translated_recipes:
+        return render_template('recipe_details.html', recipe_details=recipe_details)
 
     # Malzeme açıklamalarını çevir
     for ingredient in recipe_details.get('extendedIngredients', []):
@@ -73,10 +73,15 @@ def recipe_details(recipe_id):
         instructions_text = soup.get_text(separator="\n")
         recipe_details['instructions'] = dl.translate(instructions_text, 'EN', 'TR')
 
-    # Tarif adımlarını analiz et ve çevir
-    analyzed_instructions = sp.analyze_recipe_instructions(recipe_details['instructions'])
-    analyzed_instructions = dl.translate(analyzed_instructions, 'EN', 'TR')
-    recipe_details.append(analyzed_instructions)
+    # Tarif adımlarını çevir
+    analyzed_instructions = sp.get_analyzed_recipe_instructions(recipe_details['id'])
+    analyzed_instructions[0]['name'] = dl.translate(analyzed_instructions[0]['name'], 'EN', 'TR')
+    for instruction in analyzed_instructions[0]['steps']:
+        instruction['step'] = dl.translate(instruction['step'], 'EN', 'TR')
+        for equipment in instruction['equipment']:
+            equipment['name'] = dl.translate(equipment['name'], 'EN', 'TR')
+        for ingredient in instruction['ingredients']:
+            ingredient['name'] = dl.translate(ingredient['name'], 'EN', 'TR')
 
     # Tarifin daha önce çevrildiğini belirt
     translated_recipes.append(recipe_details['id'])
