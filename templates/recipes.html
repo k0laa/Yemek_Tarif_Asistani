@@ -63,17 +63,14 @@
             margin: 20px 0;
         }
 
-        .recipe-card .difficulty,
+
         .recipe-card .time {
             font-size: 1em;
             margin: 10px 0;
             color: #333;
         }
 
-        .recipe-card .difficulty {
-            font-weight: bold;
-            color: #FF6347;
-        }
+
 
         .recipe-card .time {
             font-weight: bold;
@@ -101,14 +98,13 @@
     </style>
 </head>
 <body>
-    <div class="loading-message" id="loadingMessage">Tarifler yükleniyor...</div>
+    <div class="loading-message" id="loadingMessage">Tarifler yükleniyor,bu işlem yaklaşık 1 dakika sürebilir...</div>
     <h1>İşte Bulunan Tarifler</h1>
     <div class="recipes-container" id="recipesContainer">
         {% for recipe in recipes %}
             <div class="recipe-card">
                 <img src="{{ recipe['image'] }}" alt="{{ recipe['title'] }}">
                 <h3>{{ recipe['title'] }}</h3>
-                <p class="difficulty">Zorluk: {{ recipe['difficulty'] }}</p>
                 <p class="time">Yapılma Süresi: {{ recipe['readyInMinutes'] }} dakika</p>
                 <form action="/recipe_details/{{ recipe['id'] }}" method="get">
                     <button type="submit" class="view-recipe-btn">Tarifi Görüntüle</button>
