@@ -55,11 +55,11 @@ def get_multi_recipe_details(recipe_ids):
 
 
 # Tarif adımlarını analiz eder
-def analyze_recipe_instructions(recipe_instructions):
+def get_analyzed_recipe_instructions(recipe_id):
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
-        instructions = _analyze_recipe_instructions_from_api(api_key, recipe_instructions)
+        instructions = _get_analyzed_recipe_instructions(api_key, recipe_id)
         if instructions is not None:
             return instructions
 
@@ -123,11 +123,12 @@ def _get_multi_recipe_details_from_api(api_key, recipe_ids):
         return None
     return response.json()
 
+
 # Tarif adımlarını analiz eder
-def _analyze_recipe_instructions_from_api(api_key, recipe_instructions):
-    analyze_url = f"{base_url}analyzeInstructions"
+def _get_analyzed_recipe_instructions(api_key, recipe_id):
+    analyze_url = f"{base_url}{recipe_id}/analyzedInstructions"
     params = {
-        "instructions": recipe_instructions,
+        "stepBreakdown": True,
         "apiKey": api_key
     }
     response = requests.get(analyze_url, params=params)
