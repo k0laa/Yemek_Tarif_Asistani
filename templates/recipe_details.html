@@ -3,35 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarif Detayları</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.0.0/dist/full.css" rel="stylesheet">
+    <title>{{ recipe_details['title'] }} Tarifi</title>
     <style>
-        html, body {
-            height: 100%;
-        }
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: Arial, sans-serif;
             margin: 0;
-            background-color: #1a202c; /* Koyu arka plan rengi */
+            padding: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px;
+            color: white;
+        }
+
+        .recipe-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .recipe-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+
+        .recipe-summary {
+            font-size: 1.2em;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .recipe-ingredients ul, .recipe-instructions p {
+            list-style-type: disc; /* Noktalar malzemenin başında */
+            padding-left: 20px;
+            margin: 10px 0;
+            text-align: left; /* Yazı baştan başlasın */
+        }
+
+        .recipe-details {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left; /* Yazılar sola hizalanacak */
+        }
+
+
+        .recipe-ingredients li {
+            font-size: 1.1em;
+            margin: 5px 0;
+        }
+
+        .recipe-info p {
+            font-size: 1.1em;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .view-recipe-btn {
+            padding: 10px 20px;
+            background-color: #FB9EC6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-recipe-btn:hover {
+            background-color: #FFCCE1;
         }
     </style>
 </head>
-<body class="bg-base-100 dark:bg-gray-900 dark:text-white">
-    <div class="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow-lg rounded-lg text-center">
-        <h1 class="text-3xl font-bold mb-4">{{ recipe_details['title'] }}</h1>
-        <h2 class="text-xl font-semibold">Malzemeler:</h2>
-        <ul class="list-disc list-inside text-left mx-auto w-full">
-            {% for ingredient in recipe_details['extendedIngredients'] %}
-                <li>{{ ingredient['original'] }}</li>
-            {% endfor %}
-        </ul>
-        <h2 class="text-xl font-semibold mt-4">Adımlar:</h2>
-        <p class="text-left mx-auto w-full">{{ recipe_details['instructions'] }}</p>
-        <div class="flex justify-center mt-4">
-            <a href="/" class="btn btn-secondary">Geri Dön</a>
-        </div>
+<body>
+
+<div class="recipe-container">
+    <h1>{{ recipe_details['title'] }}</h1>
+
+    <div class="recipe-image">
+        <img src="{{ recipe_details['image'] }}" alt="{{ recipe_details['title'] }}">
     </div>
+
+    <div class="recipe-details">
+        <h2>Özet</h2>
+        <p class="recipe-summary">{{ summary }}</p>
+
+        <div class="recipe-ingredients">
+            <h3>Malzemeler</h3>
+            <ul>
+                {% for ingredient in recipe_details['extendedIngredients'] %}
+                <li>{{ ingredient['original'] }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="recipe-instructions">
+            <h3>Yapılış</h3>
+            <p>{{ recipe_details['instructions'] }}</p>
+        </div>
+
+        <div class="recipe-info">
+            <p><strong>Kişi Sayısı:</strong> {{ servings if servings else 'Veri yok' }}</p>
+            <p><strong>Hazırlık Süresi:</strong> {{ recipe_details['readyInMinutes'] }} dakika</p>
+        </div>
+
+
+        <button class="view-recipe-btn" onclick="window.history.back()">Geri Dön</button>
+    </div>
+</div>
+
 </body>
 </html>
