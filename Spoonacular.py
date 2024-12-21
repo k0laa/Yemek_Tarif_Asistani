@@ -11,7 +11,7 @@ def find_recipe(ingredients):
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
-        recipes = get_recipe_from_api(api_key, ingredients)
+        recipes = _get_recipe_from_api(api_key, ingredients)
         if recipes is not None:
             return recipes
 
@@ -23,7 +23,7 @@ def find_random_recipe(include_tags, exclude_tags):
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
-        details = find_random_recipe_from_api(api_key, include_tags, exclude_tags)
+        details = _find_random_recipe_from_api(api_key, include_tags, exclude_tags)
         if details is not None:
             return details
 
@@ -35,7 +35,7 @@ def get_recipe_details(recipe_id):
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
-        details = get_recipe_details_from_api(api_key, recipe_id)
+        details = _get_recipe_details_from_api(api_key, recipe_id)
         if details is not None:
             return details
 
@@ -47,15 +47,27 @@ def get_multi_recipe_details(recipe_ids):
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
-        details = get_multi_recipe_details_from_api(api_key, recipe_ids)
+        details = _get_multi_recipe_details_from_api(api_key, recipe_ids)
         if details is not None:
             return details
 
     return None
 
 
+# Tarif adımlarını analiz eder
+def analyze_recipe_instructions(recipe_instructions):
+    api_keys = load_api_keys()
+    for api_key in api_keys:
+        # API ile tarif aramasını dene
+        instructions = _analyze_recipe_instructions_from_api(api_key, recipe_instructions)
+        if instructions is not None:
+            return instructions
+
+    return None
+
+
 # Malzemelere göre tarif arar
-def get_recipe_from_api(api_key, ingredients):
+def _get_recipe_from_api(api_key, ingredients):
     ingredients_en = dl.translate(ingredients, 'TR', 'EN-US')
     search_url = f"{base_url}findByIngredients"
     params = {
@@ -72,7 +84,7 @@ def get_recipe_from_api(api_key, ingredients):
 
 
 # Rastgele bir tarif arar
-def find_random_recipe_from_api(api_key, include_tags, exclude_tags):
+def _find_random_recipe_from_api(api_key, include_tags, exclude_tags):
     random_url = f"{base_url}random"
     params = {
         "includeNutrition": True,
@@ -89,7 +101,7 @@ def find_random_recipe_from_api(api_key, include_tags, exclude_tags):
 
 
 # ID si gelen tarifin detaylarını getirir
-def get_recipe_details_from_api(api_key, recipe_id):
+def _get_recipe_details_from_api(api_key, recipe_id):
     details_url = f"{base_url}{recipe_id}/information"
     response = requests.get(details_url, params={"apiKey": api_key})
 
@@ -99,13 +111,26 @@ def get_recipe_details_from_api(api_key, recipe_id):
 
 
 # ID si gelen tarifin detaylarını getirir
-def get_multi_recipe_details_from_api(api_key, recipe_ids):
+def _get_multi_recipe_details_from_api(api_key, recipe_ids):
     details_url = f"{base_url}informationBulk"
     params = {
         "ids": recipe_ids,
         "apiKey": api_key
     }
     response = requests.get(details_url, params=params)
+
+    if response.status_code == 402:
+        return None
+    return response.json()
+
+# Tarif adımlarını analiz eder
+def _analyze_recipe_instructions_from_api(api_key, recipe_instructions):
+    analyze_url = f"{base_url}analyzeInstructions"
+    params = {
+        "instructions": recipe_instructions,
+        "apiKey": api_key
+    }
+    response = requests.get(analyze_url, params=params)
 
     if response.status_code == 402:
         return None
