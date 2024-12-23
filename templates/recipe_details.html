@@ -26,24 +26,20 @@
             padding: 20px;
         }
 
+        .recipe-image {
+            position: relative;
+            display: inline-block;
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
         .recipe-image img {
             width: 100%;
             height: auto;
             border-radius: 8px;
-        }
-
-
-        .recipe-summary {
-            font-size: 1.2em;
-            color: #333;
-            margin: 20px 0;
-        }
-
-        .recipe-ingredients ul, .recipe-instructions p {
-            list-style-type: disc; /* Noktalar malzemenin başında */
-            padding-left: 20px;
-            margin: 10px 0;
-            text-align: left; /* Yazı baştan başlasın */
         }
 
         .recipe-details {
@@ -53,13 +49,72 @@
             width: 80%;
             padding: 20px;
             margin-top: 20px;
-            text-align: left; /* Yazılar sola hizalanacak */
+            text-align: left;
         }
 
+        .recipe-ingredients {
+            margin-top: 20px;
+        }
 
-        .recipe-ingredients li {
+        .ingredient-card {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .ingredient-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .ingredient-card span {
             font-size: 1.1em;
-            margin: 5px 0;
+            color: #333;
+        }
+
+        .recipe-instructions {
+            margin-top: 20px;
+        }
+
+        .instruction-card {
+            display: flex;
+            align-items: flex-start;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+
+        .instruction-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .instruction-card-content {
+            flex: 1;
+        }
+
+        .instruction-card h4 {
+            font-size: 1.2em;
+            color: #FB9EC6;
+            margin-bottom: 10px;
+        }
+
+        .instruction-card p {
+            font-size: 1em;
+            color: #333;
+            line-height: 1.6;
         }
 
         .recipe-info p {
@@ -94,28 +149,50 @@
     </div>
 
     <div class="recipe-details">
-        <h2>Özet</h2>
+        <h2>-TARİF-</h2>
         <p class="recipe-summary">{{ summary }}</p>
 
         <div class="recipe-ingredients">
-            <h3>Malzemeler</h3>
-            <ul>
+            <h3>Malzemeler:</h3>
+            {% if recipe_details['extendedIngredients'] and recipe_details['extendedIngredients']|length > 0 %}
                 {% for ingredient in recipe_details['extendedIngredients'] %}
-                <li>{{ ingredient['original'] }}</li>
+                    <div class="ingredient-card">
+                        {% if ingredient['image'] %}
+                            <img src="https://spoonacular.com/cdn/ingredients_100x100/{{ ingredient['image'] }}" alt="{{ ingredient['name'] }}">
+                        {% endif %}
+                        <span>{{ ingredient['original'] }}</span>
+                    </div>
                 {% endfor %}
-            </ul>
+            {% else %}
+                <p>Malzeme bilgisi bulunamadı.</p>
+            {% endif %}
         </div>
 
         <div class="recipe-instructions">
-            <h3>Yapılış</h3>
-            <p>{{ recipe_details['instructions'] }}</p>
+            <h3>Yapılışı:</h3>
+            {% if recipe_details['analyzedInstructions'] and recipe_details['analyzedInstructions']|length > 0 %}
+                {% for instruction in recipe_details['analyzedInstructions'] %}
+                    {% for step in instruction['steps'] %}
+                        <div class="instruction-card">
+                            {% if step['image'] %}
+                                <img src="{{ step['image'] }}" alt="Adım Görseli">
+                            {% endif %}
+                            <div class="instruction-card-content">
+                                <h4>Adım {{ step['number'] }}</h4>
+                                <p>{{ step['step'] | replace("Step", "Adım") }}</p> <!-- İngilizce adımları Türkçeye çevirir -->
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p>{{ recipe_details['instructions'] if recipe_details['instructions'] else 'Yapılış adımları bulunamadı.' }}</p>
+            {% endif %}
         </div>
 
         <div class="recipe-info">
             <p><strong>Kişi Sayısı:</strong> {{ recipe_details['servings'] }}</p>
             <p><strong>Hazırlık Süresi:</strong> {{ recipe_details['readyInMinutes'] }} dakika</p>
         </div>
-
 
         <button class="view-recipe-btn" onclick="window.history.back()">Geri Dön</button>
     </div>
