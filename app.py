@@ -46,16 +46,16 @@ def recipe_details(recipe_id):
     translated = False
 
     # İlgili tarifin detaylarını bul
+    for recipe in finded_recipes_details:
+        if recipe['id'] == recipe_id:
+            recipe_details = recipe.copy()
+            break
+
+    # İlgili tarifin çevirilmiş detaylarını bul
     for recipe in translated_recipes:
         if recipe['id'] == recipe_id:
             recipe_details = recipe.copy()
             translated = True
-            break
-
-    # İlgili tarifin detaylarını bul
-    for recipe in finded_recipes_details:
-        if recipe['id'] == recipe_id:
-            recipe_details = recipe.copy()
             break
 
     if recipe_details is None:
