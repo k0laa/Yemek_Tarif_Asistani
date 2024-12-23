@@ -77,6 +77,7 @@ def recipe_details(recipe_id):
 
     # Tarif adımlarını çevir
     analyzed_instructions = sp.get_analyzed_recipe_instructions(recipe_details['id'])
+
     analyzed_instructions[0]['name'] = dl.translate(analyzed_instructions[0]['name'], 'EN', 'TR')
     for instruction in analyzed_instructions[0]['steps']:
         instruction['step'] = dl.translate(instruction['step'], 'EN', 'TR')
@@ -84,6 +85,8 @@ def recipe_details(recipe_id):
             equipment['name'] = dl.translate(equipment['name'], 'EN', 'TR')
         for ingredient in instruction['ingredients']:
             ingredient['name'] = dl.translate(ingredient['name'], 'EN', 'TR')
+
+    recipe_details["analyzedInstructions"] = analyzed_instructions
 
     # Tarifin daha önce çevrildiğini belirt
     translated_recipes.append(recipe_details)
