@@ -75,6 +75,10 @@ def recipe_details(recipe_id):
         instructions_text = soup.get_text(separator="\n")
         recipe_details['instructions'] = dl.translate(instructions_text, 'EN', 'TR')
 
+    soup = BeautifulSoup(recipe_details['summary'], "html.parser")
+    summary_text = soup.get_text(separator="\n")
+    recipe_details['summary'] = dl.translate(summary_text, 'EN', 'TR')
+
     # Tarif adımlarını çevir
     analyzed_instructions = sp.get_analyzed_recipe_instructions(recipe_details['id'])
 

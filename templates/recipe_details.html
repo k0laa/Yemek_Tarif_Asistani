@@ -150,7 +150,12 @@
 
     <div class="recipe-details">
         <h2>-TARİF-</h2>
-        <p class="recipe-summary">{{ summary }}</p>
+        <p class="recipe-summary">{{ recipe_details['summary'] }}</p>
+
+        <div class="recipe-info">
+            <p><strong>Kişi Sayısı:</strong> {{ recipe_details['servings'] }}</p>
+            <p><strong>Hazırlık Süresi:</strong> {{ recipe_details['readyInMinutes'] }} dakika</p>
+        </div>
 
         <div class="recipe-ingredients">
             <h3>Malzemeler:</h3>
@@ -189,10 +194,6 @@
             {% endif %}
         </div>
 
-        <div class="recipe-info">
-            <p><strong>Kişi Sayısı:</strong> {{ recipe_details['servings'] }}</p>
-            <p><strong>Hazırlık Süresi:</strong> {{ recipe_details['readyInMinutes'] }} dakika</p>
-        </div>
 
         <button class="view-recipe-btn" onclick="window.history.back()">Geri Dön</button>
     </div>
