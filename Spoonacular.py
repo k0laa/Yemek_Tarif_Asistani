@@ -11,7 +11,7 @@ def find_recipe(ingredients):
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
-        recipes = _get_recipe_from_api(api_key, ingredients)
+        recipes = _find_recipe_from_api(api_key, ingredients)
         if recipes is not None:
             return recipes
 
@@ -67,7 +67,7 @@ def get_analyzed_recipe_instructions(recipe_id):
 
 
 # Malzemelere göre tarif arar
-def _get_recipe_from_api(api_key, ingredients):
+def _find_recipe_from_api(api_key, ingredients):
     ingredients_en = dl.translate(ingredients, 'TR', 'EN-US')
     search_url = f"{base_url}findByIngredients"
     params = {
