@@ -46,7 +46,9 @@ def find_recipe():
 # Rastgele tarif sonuçları sayfası
 @app.route('/find_random_recipe', methods=['POST'])
 def find_random_recipe():
-    global finded_recipes_details
+    global finded_recipes_details, ingredients
+    finded_recipes_details.clear()
+    ingredients = ''
 
     include_tags = request.form['include_tags']
     exclude_tags = request.form['exclude_tags']
