@@ -15,6 +15,12 @@ def index():
     return render_template('index.html')
 
 
+# Rastgele tarif arama sayfası
+@app.route('/random_recipe')
+def random_recipe():
+    return render_template('random_recipe.html')
+
+
 # Tarif arama sonuçları sayfası
 @app.route('/find_recipe', methods=['POST'])
 def find_recipe():
@@ -33,6 +39,25 @@ def find_recipe():
         for details in recipes_details:
             details['title'] = dl.translate(details['title'], 'EN', 'TR')  # Detaylardaki başlığı çevirir
             finded_recipes_details.append(details)
+
+    return render_template('recipes.html', recipes=finded_recipes_details)
+
+
+# Rastgele tarif sonuçları sayfası
+@app.route('/find_random_recipe', methods=['POST'])
+def find_random_recipe():
+    global finded_recipes_details
+
+    include_tags = request.form['include_tags']
+    exclude_tags = request.form['exclude_tags']
+
+    recipes = sp.find_random_recipe(include_tags, exclude_tags)  # Rastgele bir tarif arar
+    recipe_ids = ', '.join(str(recipe['id']) for recipe in recipes)  # Tariflerin ID'lerini alır
+    recipes_details = sp.get_multi_recipe_details(recipe_ids)  # ID si gelen tariflerin detaylarını getirir
+
+    for details in recipes_details:
+        details['title'] = dl.translate(details['title'], 'EN', 'TR')
+        finded_recipes_details.append(details)
 
     return render_template('recipes.html', recipes=finded_recipes_details)
 
