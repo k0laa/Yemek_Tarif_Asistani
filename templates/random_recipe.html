@@ -44,34 +44,127 @@
     </style>
 </head>
 <body>
-    <h1>Tarif Bulucu</h1>
-    <div class="container">
-        <label for="cuisineType">Mutfak Türü Seçiniz:</label>
-        <select id="cuisineType">
-            <option value="">Seçiniz</option>
-            <option value="italian">İtalyan</option>
-            <option value="turkish">Türk</option>
-            <option value="chinese">Çin</option>
-            <option value="mexican">Meksika</option>
-        </select>
+<h1>Tarif Bulucu</h1>
+<div class="container">
+    <label for="cuisineType">Mutfak Türü Seçiniz:</label>
+    <select id="cuisineType">
+        <option value="">Seçiniz</option>
+        <option value="italian">İtalyan</option>
+        <option value="turkish">Türk</option>
+        <option value="chinese">Çin</option>
+        <option value="mexican">Meksika</option>
+    </select>
 
-        <label for="dietaryRestrictions">Diyet Kısıtlamaları:</label>
-        <select id="dietaryRestrictions">
-            <option value="">Seçiniz</option>
-            <option value="lactose_free">Laktozsuz</option>
-            <option value="gluten_free">Glutensiz</option>
-            <option value="vegan">Vegan</option>
-        </select>
+    <label for="dietaryRestrictions">Diyet Kısıtlamaları:</label>
+    <select id="dietaryRestrictions">
+        <option value="">Seçiniz</option>
+        <option value="lactose_free">Laktozsuz</option>
+        <option value="gluten_free">Glutensiz</option>
+        <option value="vegan">Vegan</option>
+    </select>
 
-        <button id="randomButton" onclick="getRandom()">Rastgele Tarif Getir</button>
-    </div>
+    <button id="randomButton" onclick="getRandom()">Rastgele Tarif Getir</button>
+</div>
 
-    <div id="recipeDisplay"></div>
+<div id="recipeDisplay"></div>
 
-    <script>
-        function getRandom() {
-            window.location.href = 'random_recipes.html'; // random_recipes.html dosyasına yönlendir
-        }
-    </script>
+<script>
+    function getRandom() {
+        ////////////Berfine Not////////////
+        // burada exlude_tags(istenmeyenler) değerlerini alıp formda gönderiyoruz.
+        // Cuisines, Intolerances, Meal Types, Diet Definitions isminde dropdownlar olabilir ama birden fazla seçilebilir olmalı.
+        // Ornek index.htmlde veriler dizi olarak bu şekil alınmış:
+        // const Intolerances = document.getElementById('Intolerances').value;
+        // const MealTypes = document.getElementById('MealTypes').value;
+        // const DietDefinitions = document.getElementById('DietDefinitions').value;
+        // const Cuisines = document.getElementById('Cuisines').value;
+
+        const cuisineType = document.getElementById('cuisineType').value;
+        const dietaryRestrictions = document.getElementById('dietaryRestrictions').value;
+
+
+        // Hepsinden iki tane olup include_tags(istenenler) için değerlerini alıp formda gönderiyoruz.
+        // örnek:
+        // const Intolerances_inculde = document.getElementById('Intolerances_inculde').value;
+        // const MealTypes_inculde = document.getElementById('MealTypes_inculde').value;
+        // değişken isimlendirmelerini daha iyi yapabilirsin şuan saçma oldu :)
+
+        // daha sonsa exclude_tags değerlerini diziye atıp formda gönderiyoruz.
+        // örnek:
+        // const exclude_tags = [];
+        // for (let i = 0; i < Intolerances.length; i++) {
+        //     exclude_tags.push(Intolerances[i]);
+        // }
+        // farklı yöntem ler kullanman gerekebilir senin yazdığın algorithmaya göre.
+        // aklıma bu şekil geldi. Belki bu şekil çalışmyadabilir  ama anlaşılması için örnek olarak böyle yazdım.
+
+        // aynısı include_tags için de yapılıcak.
+        // örnek:
+        // const include_tags = [];
+        // for (let i = 0; i < Intolerances_inculde.length; i++) {
+        //     include_tags.push(Intolerances_inculde[i]);
+        // }
+        // for (let i = 0; i < MealTypes_inculde.length; i++) {
+        //     include_tags.push(MealTypes_inculde[i]);
+        // }
+        // ...
+
+
+        ////// API ın kabul ettiği değerler aşağıda //////
+
+        // Intolerances//      //Cuisines//          //Meal Types//       //Diet Definitions//
+        // Dairy                 African               Main Course          Gluten Free
+        // Egg                   Asian                 Side Dish            Ketogenic
+        // Gluten                American              Dessert              Vegetarian
+        // Grain                 British               Appetizer            Lacto vegetarian
+        // Peanut                Cajun                 Salad                Ovo-Vegetarian
+        // Seafood               Caribbean             Bread                Vegan
+        // Sesame                Chinese               Breakfast            Pescetarian
+        // Shellfish             Eastern European      Soup                 Paleo
+        // Soy                   European              Beverage             Primal
+        // Sulfite               French                Sauce                Low FODMAP
+        // Tree Nut              German                Marinade             Whole30
+        // Wheat                 Greek                 Fingerfood
+        //                       Indian                Snack
+        //                       Irish                 Drink
+        //                       Italian
+        //                       Japanese
+        //                       Jewish
+        //                       Korean
+        //                       Latin American
+        //                       Mediterranean
+        //                       Mexican
+        //                       Middle Eastern
+        //                       Nordic
+        //                       Southern
+        //                       Spanish
+        //                       Thai
+        //                       Vietnamese
+
+
+        // birde büyük itimalle sayfa yüklenmediğinden bu şekil bırakmış olabilrsin ama tasarımı daha iyi yapabilirsin.
+
+
+        const form = document.createElement('form');
+        form.action = '/random_recipe';
+        form.method = 'post';
+
+        // buraları yukardaki gibi yaparsan oynamana gerek yok ama incele yinede
+        const cuisineInput = document.createElement('input');
+        cuisineInput.type = 'hidden';
+        cuisineInput.name = 'include_tags';
+        cuisineInput.value = include_tags.join(', ');
+
+        const dietaryInput = document.createElement('input');
+        dietaryInput.type = 'hidden';
+        dietaryInput.name = 'exclude_tags';
+        cuisineInput.value = exclude_tags.join(', ');
+
+        form.appendChild(cuisineInput);
+        form.appendChild(dietaryInput);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
 </body>
 </html>

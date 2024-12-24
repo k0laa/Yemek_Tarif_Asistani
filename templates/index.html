@@ -82,7 +82,7 @@
     <div id="ingredientInputs" class="ingredients"></div>
     <button id="createButton" onclick="generateInputs()">Kutucukları Oluştur</button>
     <button id="fetchButton" onclick="getRecipes()">Tarifleri Getir</button>
-     <button id="randomButton" onclick="getRandom()">Random Tarifleri Getir</button>
+    <button id="randomButton" onclick="getRandom()">Random Tarifleri Getir</button>
 </div>
 
 <script>
@@ -129,26 +129,27 @@
     }
 
     function getRecipes() {
-    const ingredients = Array.from(document.querySelectorAll('.ingredient')).map(input => input.value.trim());
-    if (ingredients.length > 0) {
-        const form = document.createElement('form');
-        form.action = '/find_recipe';
-        form.method = 'post';
+        const ingredients = Array.from(document.querySelectorAll('.ingredient')).map(input => input.value.trim());
+        if (ingredients.length > 0) {
+            const form = document.createElement('form');
+            form.action = '/find_recipe';
+            form.method = 'post';
 
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'ingredients';
-        input.value = ingredients.join(', ');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'ingredients';
+            input.value = ingredients.join(', ');
 
-        form.appendChild(input);
-        document.body.appendChild(form);
-        form.submit();
-    } else {
-        alert('Lütfen malzemeleri giriniz!');
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        } else {
+            alert('Lütfen malzemeleri giriniz!');
+        }
     }
-}
- function getRandom() {
-        window.location.href = 'random_recipes.html'; // Belirtilen HTML sayfasına yönlendirme
+
+    function getRandom() {
+        window.location.href = '/random_recipe'; // Flask route for random recipes
     }
 </script>
 </body>
