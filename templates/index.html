@@ -82,6 +82,7 @@
     <div id="ingredientInputs" class="ingredients"></div>
     <button id="createButton" onclick="generateInputs()">Kutucukları Oluştur</button>
     <button id="fetchButton" onclick="getRecipes()">Tarifleri Getir</button>
+     <button id="randomButton" onclick="getRandom()">Random Tarifleri Getir</button>
 </div>
 
 <script>
@@ -90,6 +91,7 @@
         const userLang = navigator.language || navigator.userLanguage;
         const createButton = document.getElementById('createButton');
         const fetchButton = document.getElementById('fetchButton');
+        const randomButton = document.getElementById('randomButton');
         const title = document.getElementById('title');
         const ingredientCountLabel = document.getElementById('ingredientCountLabel');
 
@@ -98,6 +100,7 @@
         ingredientCountLabel.textContent = "Malzeme Sayısını Giriniz:";
         createButton.textContent = "Kutucukları Oluştur";  // Buton metnini burada sabitliyoruz
         fetchButton.textContent = "Tarifleri Getir";
+        randomButton.textContent = "Random Tarifleri Getir";
     }
 
     window.onload = setButtonText; // Sayfa yüklendiğinde metinlerin güncellenmesini sağlıyoruz
@@ -144,7 +147,9 @@
         alert('Lütfen malzemeleri giriniz!');
     }
 }
-
+ function getRandom() {
+        window.location.href = 'random_recipes.html'; // Belirtilen HTML sayfasına yönlendirme
+    }
 </script>
 </body>
 </html>

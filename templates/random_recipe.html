@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarif Bulucu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        #recipeDisplay {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tarif Bulucu</h1>
+    <div class="container">
+        <label for="cuisineType">Mutfak Türü Seçiniz:</label>
+        <select id="cuisineType">
+            <option value="">Seçiniz</option>
+            <option value="italian">İtalyan</option>
+            <option value="turkish">Türk</option>
+            <option value="chinese">Çin</option>
+            <option value="mexican">Meksika</option>
+        </select>
+
+        <label for="dietaryRestrictions">Diyet Kısıtlamaları:</label>
+        <select id="dietaryRestrictions">
+            <option value="">Seçiniz</option>
+            <option value="lactose_free">Laktozsuz</option>
+            <option value="gluten_free">Glutensiz</option>
+            <option value="vegan">Vegan</option>
+        </select>
+
+        <button id="randomButton" onclick="getRandom()">Rastgele Tarif Getir</button>
+    </div>
+
+    <div id="recipeDisplay"></div>
+
+    <script>
+        function getRandom() {
+            window.location.href = 'random_recipes.html'; // random_recipes.html dosyasına yönlendir
+        }
+    </script>
+</body>
+</html>
