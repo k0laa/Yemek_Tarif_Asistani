@@ -7,14 +7,14 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
             margin: 0;
             padding: 20px;
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            color: white;
         }
 
         .container {
@@ -22,7 +22,7 @@
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
+            max-width: 500px;
             margin: auto;
         }
 
@@ -31,10 +31,24 @@
             margin: 10px 0 5px;
         }
 
-        select, button {
+        input, select, button {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #FB9EC6;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #FFCCE1;
         }
 
         #recipeDisplay {
@@ -46,132 +60,197 @@
 <body>
 <h1>Tarif Bulucu</h1>
 <div class="container">
+    <!-- Malzeme Girişi -->
+    <label for="ingredients">Malzemeleri Giriniz:</label>
+    <input type="text" id="ingredients" placeholder="Örn: tavuk, sarımsak, soğan" />
+
+    <!-- Mutfak Türü Seçimi -->
     <label for="cuisineType">Mutfak Türü Seçiniz:</label>
     <select id="cuisineType">
         <option value="">Seçiniz</option>
-        <option value="italian">İtalyan</option>
-        <option value="turkish">Türk</option>
-        <option value="chinese">Çin</option>
-        <option value="mexican">Meksika</option>
+        <option value="African">Afrika</option>
+        <option value="Asian">Asya</option>
+        <option value="American">Amerikan</option>
+        <option value="British">İngiliz</option>
+        <option value="Cajun">Cajun</option>
+        <option value="Caribbean">Karayip</option>
+        <option value="Chinese">Çin</option>
+        <option value="Eastern European">Doğu Avrupa</option>
+        <option value="European">Avrupa</option>
+        <option value="French">Fransız</option>
+        <option value="German">Alman</option>
+        <option value="Greek">Yunan</option>
+        <option value="Indian">Hint</option>
+        <option value="Irish">İrlanda</option>
+        <option value="Italian">İtalyan</option>
+        <option value="Japanese">Japon</option>
+        <option value="Jewish">Yahudi</option>
+        <option value="Korean">Kore</option>
+        <option value="Latin American">Latin Amerika</option>
+        <option value="Mediterranean">Akdeniz</option>
+        <option value="Mexican">Meksika</option>
+        <option value="Middle Eastern">Orta Doğu</option>
+        <option value="Nordic">Nordik</option>
+        <option value="Southern">Güney</option>
+        <option value="Spanish">İspanyol</option>
+        <option value="Thai">Tayland</option>
+        <option value="Vietnamese">Vietnam</option>
     </select>
 
+    <!-- Diyet Kısıtlamaları -->
     <label for="dietaryRestrictions">Diyet Kısıtlamaları:</label>
     <select id="dietaryRestrictions">
         <option value="">Seçiniz</option>
-        <option value="lactose_free">Laktozsuz</option>
-        <option value="gluten_free">Glutensiz</option>
-        <option value="vegan">Vegan</option>
+        <option value="Gluten Free">Glutensiz</option>
+        <option value="Ketogenic">Ketojenik</option>
+        <option value="Vegetarian">Vejetaryen</option>
+        <option value="Lacto vegetarian">Lakto Vejetaryen</option>
+        <option value="Ovo-Vegetarian">Ovo Vejetaryen</option>
+        <option value="Vegan">Vegan</option>
+        <option value="Pescetarian">Pesketaryen</option>
+        <option value="Paleo">Paleo</option>
+        <option value="Primal">Primal</option>
+        <option value="Low FODMAP">Düşük FODMAP</option>
+        <option value="Whole30">Whole30</option>
     </select>
 
-    <button id="randomButton" onclick="getRandom()">Rastgele Tarif Getir</button>
+    <!-- Yemek Türü Seçimi -->
+    <label for="mealType">Yemek Türü Seçiniz:</label>
+    <select id="mealType">
+        <option value="">Seçiniz</option>
+        <option value="Main Course">Ana Yemek</option>
+        <option value="Side Dish">Yan Yemek</option>
+        <option value="Dessert">Tatlı</option>
+        <option value="Appetizer">Aperatif</option>
+        <option value="Salad">Salata</option>
+        <option value="Bread">Ekmek</option>
+        <option value="Breakfast">Kahvaltı</option>
+        <option value="Soup">Çorba</option>
+        <option value="Beverage">İçecek</option>
+        <option value="Sauce">Sos</option>
+        <option value="Marinade">Marine</option>
+        <option value="Fingerfood">Atıştırmalık</option>
+        <option value="Snack">Atıştırmalık</option>
+        <option value="Drink">İçecek</option>
+    </select>
+
+    <!-- Alerjenler -->
+    <label for="intolerances">Alerjenler:</label>
+    <select id="intolerances">
+        <option value="">Seçiniz</option>
+        <option value="Dairy">Süt</option>
+        <option value="Egg">Yumurta</option>
+        <option value="Gluten">Gluten</option>
+        <option value="Grain">Tahıl</option>
+        <option value="Peanut">Yer Fıstığı</option>
+        <option value="Seafood">Deniz Ürünü</option>
+        <option value="Sesame">Susam</option>
+        <option value="Shellfish">Kabuklu Deniz Ürünü</option>
+        <option value="Soy">Soya</option>
+        <option value="Sulfite">Sülfit</option>
+        <option value="Tree Nut">Kuruyemiş</option>
+        <option value="Wheat">Buğday</option>
+    </select>
+
+    <!-- Dahil Edilecek Etiketler -->
+    <label for="include_tags">Dahil Edilecek Etiketler:</label>
+    <input type="text" id="include_tags" name="include_tags" placeholder="Örneğin: tavuk, sarımsak" />
+
+    <!-- Hariç Tutulacak Etiketler -->
+    <label for="exclude_tags">Hariç Tutulacak Etiketler:</label>
+    <input type="text" id="exclude_tags" name="exclude_tags" placeholder="Örneğin: tuz, şeker" />
+
+    <!-- Rastgele Tarif Getir Butonu -->
+    <button id="randomButton" type="submit">Rastgele Tarif Getir</button>
 </div>
 
 <div id="recipeDisplay"></div>
 
 <script>
     function getRandom() {
-        ////////////Berfine Not////////////
-        // burada exlude_tags(istenmeyenler) değerlerini alıp formda gönderiyoruz.
-        // Cuisines, Intolerances, Meal Types, Diet Definitions isminde dropdownlar olabilir ama birden fazla seçilebilir olmalı.
-        // Ornek index.htmlde veriler dizi olarak bu şekil alınmış:
-        // const Intolerances = document.getElementById('Intolerances').value;
-        // const MealTypes = document.getElementById('MealTypes').value;
-        // const DietDefinitions = document.getElementById('DietDefinitions').value;
-        // const Cuisines = document.getElementById('Cuisines').value;
+        // Rastgele tarif getirme rotasına yönlendir
+        window.location.href = '/random_recipe';
+    }
 
+    function findRecipe() {
+        // Kullanıcıdan verileri toplama
+        const ingredients = document.getElementById('ingredients').value.trim();
         const cuisineType = document.getElementById('cuisineType').value;
         const dietaryRestrictions = document.getElementById('dietaryRestrictions').value;
+        const mealType = document.getElementById('mealType').value;
+        const intolerances = document.getElementById('intolerances').value;
+        const includeTags = document.getElementById('include_tags').value.trim();
+        const excludeTags = document.getElementById('exclude_tags').value.trim();
 
+        // uyarı için
+        if (!ingredients && !cuisineType && !dietaryRestrictions && !mealType && !intolerances && !includeTags && !excludeTags) {
+            alert('Lütfen en az bir filtre veya malzeme giriniz!');
+            return;
+        }
 
-        // Hepsinden iki tane olup include_tags(istenenler) için değerlerini alıp formda gönderiyoruz.
-        // örnek:
-        // const Intolerances_inculde = document.getElementById('Intolerances_inculde').value;
-        // const MealTypes_inculde = document.getElementById('MealTypes_inculde').value;
-        // değişken isimlendirmelerini daha iyi yapabilirsin şuan saçma oldu :)
-
-        // daha sonsa exclude_tags değerlerini diziye atıp formda gönderiyoruz.
-        // örnek:
-        // const exclude_tags = [];
-        // for (let i = 0; i < Intolerances.length; i++) {
-        //     exclude_tags.push(Intolerances[i]);
-        // }
-        // farklı yöntem ler kullanman gerekebilir senin yazdığın algorithmaya göre.
-        // aklıma bu şekil geldi. Belki bu şekil çalışmyadabilir  ama anlaşılması için örnek olarak böyle yazdım.
-
-        // aynısı include_tags için de yapılıcak.
-        // örnek:
-        // const include_tags = [];
-        // for (let i = 0; i < Intolerances_inculde.length; i++) {
-        //     include_tags.push(Intolerances_inculde[i]);
-        // }
-        // for (let i = 0; i < MealTypes_inculde.length; i++) {
-        //     include_tags.push(MealTypes_inculde[i]);
-        // }
-        // ...
-
-
-        ////// API ın kabul ettiği değerler aşağıda //////
-
-        // Intolerances//      //Cuisines//          //Meal Types//       //Diet Definitions//
-        // Dairy                 African               Main Course          Gluten Free
-        // Egg                   Asian                 Side Dish            Ketogenic
-        // Gluten                American              Dessert              Vegetarian
-        // Grain                 British               Appetizer            Lacto vegetarian
-        // Peanut                Cajun                 Salad                Ovo-Vegetarian
-        // Seafood               Caribbean             Bread                Vegan
-        // Sesame                Chinese               Breakfast            Pescetarian
-        // Shellfish             Eastern European      Soup                 Paleo
-        // Soy                   European              Beverage             Primal
-        // Sulfite               French                Sauce                Low FODMAP
-        // Tree Nut              German                Marinade             Whole30
-        // Wheat                 Greek                 Fingerfood
-        //                       Indian                Snack
-        //                       Irish                 Drink
-        //                       Italian
-        //                       Japanese
-        //                       Jewish
-        //                       Korean
-        //                       Latin American
-        //                       Mediterranean
-        //                       Mexican
-        //                       Middle Eastern
-        //                       Nordic
-        //                       Southern
-        //                       Spanish
-        //                       Thai
-        //                       Vietnamese
-
-
-        // birde büyük itimalle sayfa yüklenmediğinden bu şekil bırakmış olabilrsin ama tasarımı daha iyi yapabilirsin.
-
-        // filtreler sayfada türkçe görünmeli ama arka planda yukarıda yazdığım gibi
-        // ingilizce ve büyük küçük harflere dikkat edilmeli.
-        // örnek:
-        // <label for="cuisineType">Mutfak Türü Seçiniz:</label>
-        // <select id="cuisineType">
-        //     <option value="">Seçiniz</option>
-        //     <option value="Italian">İtalyan</option>
-        //     <option value="Greek">Yunan</option>
-        //     <option value="Chinese">Çin</option>
-        // ...
-
+        // form ile gönderme
         const form = document.createElement('form');
-        form.action = '/random_recipe';
+        form.action = '/find_random_recipe';
         form.method = 'post';
 
-        // buraları yukardaki gibi yaparsan oynamana gerek yok ama incele yinede
-        const cuisineInput = document.createElement('input');
-        cuisineInput.type = 'hidden';
-        cuisineInput.name = 'include_tags';
-        cuisineInput.value = include_tags.join(', ');
+        // gizli inputlar
+        if (ingredients) {
+            const ingredientsInput = document.createElement('input');
+            ingredientsInput.type = 'hidden';
+            ingredientsInput.name = 'ingredients';
+            ingredientsInput.value = ingredients;
+            form.appendChild(ingredientsInput);
+        }
 
-        const dietaryInput = document.createElement('input');
-        dietaryInput.type = 'hidden';
-        dietaryInput.name = 'exclude_tags';
-        cuisineInput.value = exclude_tags.join(', ');
+        if (cuisineType) {
+            const cuisineInput = document.createElement('input');
+            cuisineInput.type = 'hidden';
+            cuisineInput.name = 'cuisineType';
+            cuisineInput.value = cuisineType;
+            form.appendChild(cuisineInput);
+        }
 
-        form.appendChild(cuisineInput);
-        form.appendChild(dietaryInput);
+        if (dietaryRestrictions) {
+            const dietaryInput = document.createElement('input');
+            dietaryInput.type = 'hidden';
+            dietaryInput.name = 'dietaryRestrictions';
+            dietaryInput.value = dietaryRestrictions;
+            form.appendChild(dietaryInput);
+        }
+
+        if (mealType) {
+            const mealTypeInput = document.createElement('input');
+            mealTypeInput.type = 'hidden';
+            mealTypeInput.name = 'mealType';
+            mealTypeInput.value = mealType;
+            form.appendChild(mealTypeInput);
+        }
+
+        if (intolerances) {
+            const intolerancesInput = document.createElement('input');
+            intolerancesInput.type = 'hidden';
+            intolerancesInput.name = 'intolerances';
+            intolerancesInput.value = intolerances;
+            form.appendChild(intolerancesInput);
+        }
+
+        if (includeTags) {
+            const includeTagsInput = document.createElement('input');
+            includeTagsInput.type = 'hidden';
+            includeTagsInput.name = 'include_tags';
+            includeTagsInput.value = includeTags;
+            form.appendChild(includeTagsInput);
+        }
+
+        if (excludeTags) {
+            const excludeTagsInput = document.createElement('input');
+            excludeTagsInput.type = 'hidden';
+            excludeTagsInput.name = 'exclude_tags';
+            excludeTagsInput.value = excludeTags;
+            form.appendChild(excludeTagsInput);
+        }
+
+        // Formu sayfaya ekleyip gönderiyoruz
         document.body.appendChild(form);
         form.submit();
     }
