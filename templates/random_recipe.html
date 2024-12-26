@@ -44,7 +44,9 @@
             transition: transform 0.3s ease-in-out;
             overflow: hidden;
             display: inline-block;
-        }details[open] {
+        }
+
+        details[open] {
             height: auto;
         }
 
@@ -302,42 +304,42 @@
 
     function findRecipe() {
         const excludeMealType = getSelectedValues(document.getElementById('excludeMealType'));
+        const excludeCuisineType = getSelectedValues(document.getElementById('excludeCuisineType'));
+        const excludeDietaryRestrictions = getSelectedValues(document.getElementById('excludeDietaryRestrictions'));
+
         const includeMealType = getSelectedValues(document.getElementById('includeMealType'));
+        const includeCuisineType = getSelectedValues(document.getElementById('includeCuisineType'));
+        const includeDietaryRestrictions = getSelectedValues(document.getElementById('includeDietaryRestrictions'));
+
         const intolerances = getSelectedValues(document.getElementById('intolerances'));
 
-        if (!excludeMealType && !includeMealType && !intolerances) {
-            alert('Lütfen en az bir filtre seçiniz!');
-            return;
-        }
+        // Exclude ve Include Tag'leri oluştur
+        const excludeTags = [excludeMealType, excludeCuisineType, excludeDietaryRestrictions, intolerances]
+            .filter(Boolean) // Boş olanları çıkar
+            .join(', ');
+
+        const includeTags = [includeMealType, includeCuisineType, includeDietaryRestrictions]
+            .filter(Boolean) // Boş olanları çıkar
+            .join(', ');
 
         const form = document.createElement('form');
         form.action = '/find_random_recipe';
         form.method = 'post';
 
-        if (excludeMealType) {
-            const excludeMealTypeInput = document.createElement('input');
-            excludeMealTypeInput.type = 'hidden';
-            excludeMealTypeInput.name = 'excludeMealType';
-            excludeMealTypeInput.value = excludeMealType;
-            form.appendChild(excludeMealTypeInput);
-        }
+        // Gizli inputları oluştur ve forma ekle
+        const excludeTagsInput = document.createElement('input');
+        excludeTagsInput.type = 'hidden';
+        excludeTagsInput.name = 'exclude_tags';
+        excludeTagsInput.value = excludeTags;
+        form.appendChild(excludeTagsInput);
 
-        if (includeMealType) {
-            const includeMealTypeInput = document.createElement('input');
-            includeMealTypeInput.type = 'hidden';
-            includeMealTypeInput.name = 'includeMealType';
-            includeMealTypeInput.value = includeMealType;
-            form.appendChild(includeMealTypeInput);
-        }
+        const includeTagsInput = document.createElement('input');
+        includeTagsInput.type = 'hidden';
+        includeTagsInput.name = 'include_tags';
+        includeTagsInput.value = includeTags;
+        form.appendChild(includeTagsInput);
 
-        if (intolerances) {
-            const intolerancesInput = document.createElement('input');
-            intolerancesInput.type = 'hidden';
-            intolerancesInput.name = 'intolerances';
-            intolerancesInput.value = intolerances;
-            form.appendChild(intolerancesInput);
-        }
-
+        // Formu gönder
         document.body.appendChild(form);
         form.submit();
     }

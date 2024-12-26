@@ -55,13 +55,9 @@ def find_random_recipe():
     finded_recipes_details.clear()
     ingredients = ''
 
-    print(request.form)
     include_tags = [request.form['include_tags']]
     exclude_tags = [request.form['exclude_tags']]
-    print(include_tags)
-    print(exclude_tags)
     recipes = sp.find_random_recipe(include_tags, exclude_tags)  # Rastgele bir tarif arar
-    print(recipes)
     recipe_ids = ', '.join(str(recipe['id']) for recipe in recipes)  # Tariflerin ID'lerini alır
     recipes_details = sp.get_multi_recipe_details(recipe_ids)  # ID si gelen tariflerin detaylarını getirir
 
