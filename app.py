@@ -38,6 +38,11 @@ def find_recipe():
 
         for details in recipes_details:
             details['title'] = dl.translate(details['title'], 'EN', 'TR')  # Detaylardaki başlığı çevirir
+
+            soup = BeautifulSoup(details['summary'], "html.parser")
+            summary_text = soup.get_text(separator="\n")
+            details['summary'] = dl.translate(summary_text, 'EN', 'TR')
+
             finded_recipes_details.append(details)
 
     return render_template('recipes.html', recipes=finded_recipes_details)
@@ -62,6 +67,11 @@ def find_random_recipe():
 
     for details in recipes_details:
         details['title'] = dl.translate(details['title'], 'EN', 'TR')
+
+        soup = BeautifulSoup(details['summary'], "html.parser")
+        summary_text = soup.get_text(separator="\n")
+        details['summary'] = dl.translate(summary_text, 'EN', 'TR')
+
         finded_recipes_details.append(details)
 
     return render_template('recipes.html', recipes=finded_recipes_details)
@@ -104,10 +114,6 @@ def recipe_details(recipe_id):
         soup = BeautifulSoup(recipe_details['instructions'], "html.parser")
         instructions_text = soup.get_text(separator="\n")
         recipe_details['instructions'] = dl.translate(instructions_text, 'EN', 'TR')
-
-    soup = BeautifulSoup(recipe_details['summary'], "html.parser")
-    summary_text = soup.get_text(separator="\n")
-    recipe_details['summary'] = dl.translate(summary_text, 'EN', 'TR')
 
     # Tarif adımlarını çevir
     analyzed_instructions = sp.get_analyzed_recipe_instructions(recipe_details['id'])
