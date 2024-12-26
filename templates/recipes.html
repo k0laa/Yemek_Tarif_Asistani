@@ -50,6 +50,9 @@
             padding: 15px;
             text-align: center;
             margin-top: 20px;
+            position: relative;
+            transition: all 0.3s ease-in-out;
+            overflow: hidden;
         }
 
         .recipe-card img {
@@ -63,18 +66,26 @@
             margin: 20px 0;
         }
 
-
         .recipe-card .time {
             font-size: 1em;
             margin: 10px 0;
             color: #333;
         }
 
-
-
         .recipe-card .time {
             font-weight: bold;
             color: #C1CFA1;
+        }
+
+        .recipe-card .summary {
+            display: none;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+            text-align: left;
         }
 
         .view-recipe-btn {
@@ -92,13 +103,21 @@
             background-color: #FFCCE1;
         }
 
+        .recipe-card:hover {
+            transform: translateX(10px);
+        }
+
+        .recipe-card:hover .summary {
+            display: block;
+        }
+
         .recipes-container.no-blur {
             filter: none;
         }
     </style>
 </head>
 <body>
-    <div class="loading-message" id="loadingMessage">Tarifler yükleniyor,bu işlem yaklaşık 1 dakika sürebilir...</div>
+    <div class="loading-message" id="loadingMessage">Tarifler yükleniyor, bu işlem yaklaşık 1 dakika sürebilir...</div>
     <h1>İşte Bulunan Tarifler</h1>
     <div class="recipes-container" id="recipesContainer">
         {% for recipe in recipes %}
@@ -106,6 +125,9 @@
                 <img src="{{ recipe['image'] }}" alt="{{ recipe['title'] }}">
                 <h3>{{ recipe['title'] }}</h3>
                 <p class="time">Yapılma Süresi: {{ recipe['readyInMinutes'] }} dakika</p>
+                <div class="summary">
+                    <p>{{ recipe['summary'] }}</p> <!-- Tarif özeti buraya eklenir -->
+                </div>
                 <form action="/recipe_details/{{ recipe['id'] }}" method="get">
                     <button type="submit" class="view-recipe-btn">Tarifi Görüntüle</button>
                 </form>
