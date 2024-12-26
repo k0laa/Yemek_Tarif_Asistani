@@ -54,12 +54,22 @@
             transform: translateY(-10px);
         }
 
-        .card h2 {
+       .card h2 {
             font-size: 1.5em;
-            margin-bottom: 20px;
-            color: #333;
-        }
+            margin-bottom: 5px;
+            color: white;
+            padding: 15px;
+            border: 2px solid #FB9EC6;
+            border-radius: 5px;
+            display: inline-block;
+            background-color: #FB9EC6;
 
+       }
+
+       .card h2:hover {
+            border-color: #FB9EC6;
+            background-color: #FB9EC6;
+       }
         label {
             font-size: 1em;
             color: #555;
@@ -89,6 +99,7 @@
             margin-bottom: 10px;
         }
 
+
         button {
             padding: 10px 20px;
             background-color: #FB9EC6;
@@ -103,7 +114,9 @@
         button:hover {
             background-color: #FFCCE1;
         }
-
+        input[type="checkbox"] {
+        accent-color: #FB9EC6; /* Pembe */
+        }
         #recipeDisplay {
             margin-top: 30px;
             padding: 20px;
