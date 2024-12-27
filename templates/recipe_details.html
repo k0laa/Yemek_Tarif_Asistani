@@ -137,10 +137,37 @@
         .view-recipe-btn:hover {
             background-color: #FFCCE1;
         }
+
+        .backButton {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+            position: absolute; /* Absolute positioning for the card */
+            top: 10px; /* Distance from the top */
+            left: 10px; /* Distance from the left */
+            z-index: 1;
+        }
+
+        #backButton {
+            background-color: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #backButton:hover {
+            background-color: #e84118;
+        }
     </style>
 </head>
 <body>
+<div class="backButton">
 
+    <button id="backButton" onclick="window.history.back()">Geri Dön</button>
+</div>
 <div class="recipe-container">
     <h1>{{ recipe_details['title'] }}</h1>
 
@@ -192,8 +219,6 @@
             {% endif %}
         </div>
 
-
-        <button class="view-recipe-btn" onclick="window.history.back()">Geri Dön</button>
     </div>
 </div>
 
