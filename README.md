@@ -19,7 +19,7 @@ Bu proje, yemek tariflerini detaylı bir şekilde kullanıcıya sunan bir uygula
      ```
 
 2. **API Keys Dosyalarını Gizli Tutma**:
-   - `SPOONACULAR_API_KEYS.txt` dosyasının yanlışlıkla versiyon kontrolüne dahil olmaması için `.gitignore` dosyanızda şu satırın bulunduğundan emin olun:
+   - `SPOONACULAR_API_KEYS.txt` ve `DEEPL_API_KEYS.txt` dosyalarının yanlışlıkla versiyon kontrolüne dahil olmaması için `.gitignore` dosyanızda şu satırın bulunduğundan emin olun:
      ```
      SPOONACULAR_API_KEYS.txt
      DEEPL_API_KEYS.txt
