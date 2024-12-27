@@ -54,7 +54,7 @@
             transform: translateY(-10px);
         }
 
-       .card h2 {
+        .card h2 {
             font-size: 1.5em;
             margin-bottom: 5px;
             color: white;
@@ -64,12 +64,13 @@
             display: inline-block;
             background-color: #FB9EC6;
 
-       }
+        }
 
-       .card h2:hover {
+        .card h2:hover {
             border-color: #FB9EC6;
             background-color: #FB9EC6;
-       }
+        }
+
         label {
             font-size: 1em;
             color: #555;
@@ -102,7 +103,7 @@
 
         button {
             padding: 10px 20px;
-            background-color: #FB9EC6;
+            background-color: #ff7675;
             color: white;
             border: none;
             border-radius: 5px;
@@ -112,11 +113,13 @@
         }
 
         button:hover {
-            background-color: #FFCCE1;
+            background-color: #e84118;
         }
+
         input[type="checkbox"] {
-        accent-color: #FB9EC6; /* Pembe */
+            accent-color: #FB9EC6; /* Pembe */
         }
+
         #recipeDisplay {
             margin-top: 30px;
             padding: 20px;
@@ -125,16 +128,89 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 90%;
             max-width: 1200px;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .selected-filters {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Öğeleri yatayda ortalar */
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap; /* Satır başına sığmayan kartlar yeni satıra geçer */
+            text-align: center; /* Metni de ortalar */
+        }
+
+        .exlude-card {
+            padding: 10px 20px;
+            background-color: #FF6B6B;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .include-card {
+            padding: 10px 20px;
+            background-color: #A4D8B7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .intolerances-card {
+            padding: 10px 20px;
+            background-color: #FFED80;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .backButton {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+            position: absolute; /* Absolute positioning for the card */
+            top: 10px; /* Distance from the top */
+            left: 10px; /* Distance from the left */
+            z-index: 1;
+        }
+
+        #backButton {
+            background-color: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #backButton:hover {
+            background-color: #e84118;
         }
     </style>
 </head>
 <body>
+<div class="backButton">
+
+    <button id="backButton" onclick="window.history.back()">Geri Dön</button>
+</div>
 <h1>Yemek Tarifi Filtreleme</h1>
-
 <div id="recipeDisplay">
-
-    <button onclick="findRecipe()">Tarif Getir</button>
-
+    <div class="selected-filters">
+        <!-- Seçilen filtreler burada gösterilecek -->
+    </div>
+    <button onclick="findRecipe()">Tarif Bul</button>
 </div>
 
 <div class="container">
@@ -373,6 +449,76 @@
             }
         });
     });
+
+    let selectedExludeFilters = []; // Bu liste dinamik olarak güncellenebilir
+    let selectedIncludeFilters = []; // Bu liste dinamik olarak güncellenebilir
+    let selectedIntolerancesFilters = []; // Bu liste dinamik olarak güncellenebilir
+
+    function displayFilters() {
+        const filtersContainer = document.querySelector('.selected-filters');
+        filtersContainer.innerHTML = '';
+
+        selectedExludeFilters.forEach(filter => {
+            const filterCard = document.createElement('div');
+            filterCard.className = 'exlude-card';
+            filterCard.textContent = filter;
+            filtersContainer.appendChild(filterCard);
+        });
+
+        selectedIncludeFilters.forEach(filter => {
+            const filterCard = document.createElement('div');
+            filterCard.className = 'include-card';
+            filterCard.textContent = filter;
+            filtersContainer.appendChild(filterCard);
+        });
+
+        selectedIntolerancesFilters.forEach(filter => {
+            const filterCard = document.createElement('div');
+            filterCard.className = 'intolerances-card';
+            filterCard.textContent = filter;
+            filtersContainer.appendChild(filterCard);
+        });
+    }
+
+
+    const ExludeCheckboxes = document.querySelectorAll('#excludeMealType input, #excludeCuisineType input, #excludeDietaryRestrictions input');
+    const IncludeCheckboxes = document.querySelectorAll('#includeMealType input, #includeCuisineType input, #includeDietaryRestrictions input');
+    const IntolerancesCheckboxes = document.querySelectorAll('#intolerances input');
+
+    ExludeCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            if (checkbox.checked)
+                selectedExludeFilters.push(checkbox.parentElement.textContent.trim());
+            else
+                // Filtre seçimi kaldırıldıysa listeden çıkar
+                selectedExludeFilters = selectedExludeFilters.filter(filter => filter !== checkbox.parentElement.textContent.trim());
+            displayFilters();
+        });
+    });
+
+    IncludeCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            if (checkbox.checked)
+                selectedIncludeFilters.push(checkbox.parentElement.textContent.trim());
+            else
+                // Filtre seçimi kaldırıldıysa listeden çıkar
+                selectedIncludeFilters = selectedIncludeFilters.filter(filter => filter !== checkbox.parentElement.textContent.trim());
+            displayFilters();
+        });
+    });
+
+    IntolerancesCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+
+            if (checkbox.checked)
+                selectedIntolerancesFilters.push(checkbox.parentElement.textContent.trim());
+            else
+                // Filtre seçimi kaldırıldıysa listeden çıkar
+                selectedIntolerancesFilters = selectedIntolerancesFilters.filter(filter => filter !== checkbox.parentElement.textContent.trim());
+            displayFilters();
+        });
+    });
+
 </script>
 </body>
 </html>
