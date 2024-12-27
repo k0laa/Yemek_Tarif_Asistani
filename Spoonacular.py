@@ -5,9 +5,18 @@ from bs4 import BeautifulSoup
 base_url = "https://api.spoonacular.com/recipes/"
 recipe_count = 4
 
+last_api_key = None
+
 
 # Malzemelere göre tarif arar
 def find_recipe(ingredients):
+    global last_api_key
+    if last_api_key is not None:
+        # API ile tarif aramasını dene
+        recipes = _find_recipe_from_api(last_api_key, ingredients)
+        if recipes is not None:
+            return recipes
+
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
@@ -20,6 +29,13 @@ def find_recipe(ingredients):
 
 # Rastgele bir tarif arar
 def find_random_recipe(include_tags, exclude_tags):
+    global last_api_key
+    if last_api_key is not None:
+        # API ile tarif aramasını dene
+        details = _find_random_recipe_from_api(last_api_key, include_tags, exclude_tags)
+        if details is not None:
+            return details
+
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
@@ -32,6 +48,13 @@ def find_random_recipe(include_tags, exclude_tags):
 
 # ID si gelen tarifin detaylarını getirir
 def get_recipe_details(recipe_id):
+    global last_api_key
+    if last_api_key is not None:
+        # API ile tarif aramasını dene
+        details = _get_recipe_details_from_api(last_api_key, recipe_id)
+        if details is not None:
+            return details
+
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
@@ -44,6 +67,13 @@ def get_recipe_details(recipe_id):
 
 # ID si gelen tariflerin detaylarını getirir
 def get_multi_recipe_details(recipe_ids):
+    global last_api_key
+    if last_api_key is not None:
+        # API ile tarif aramasını dene
+        details = _get_multi_recipe_details_from_api(last_api_key, recipe_ids)
+        if details is not None:
+            return details
+
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
@@ -56,6 +86,13 @@ def get_multi_recipe_details(recipe_ids):
 
 # Tarif adımlarını analiz eder
 def get_analyzed_recipe_instructions(recipe_id):
+    global last_api_key
+    if last_api_key is not None:
+        # API ile tarif aramasını dene
+        instructions = _get_analyzed_recipe_instructions(last_api_key, recipe_id)
+        if instructions is not None:
+            return instructions
+
     api_keys = load_api_keys()
     for api_key in api_keys:
         # API ile tarif aramasını dene
