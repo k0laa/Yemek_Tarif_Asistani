@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
 import Spoonacular as sp
 import DeepL as dl
@@ -36,13 +35,9 @@ def find_recipe():
         recipe_ids = ', '.join(str(recipe['id']) for recipe in recipes)  # Tariflerin ID'lerini alır
         recipes_details = sp.get_multi_recipe_details(recipe_ids)  # ID si gelen tariflerin detaylarını getirir
 
+        # Tarif detaylarını çevir ve listeye ekle
         for details in recipes_details:
-            details['title'] = dl.translate(details['title'], 'EN', 'TR')  # Detaylardaki başlığı çevirir
-
-            soup = BeautifulSoup(details['summary'], "html.parser")
-            summary_text = soup.get_text(separator="\n")
-            details['summary'] = dl.translate(summary_text, 'EN', 'TR')
-
+            details = dl.translate_recipe_details(details, 'EN', 'TR')
             finded_recipes_details.append(details)
 
     return render_template('recipes.html', recipes=finded_recipes_details)
@@ -52,7 +47,7 @@ def find_recipe():
 @app.route('/find_random_recipe', methods=['POST'])
 def find_random_recipe():
     global finded_recipes_details, ingredients
-    finded_recipes_details.clear()
+    finded_recipes_details.clear();
     ingredients = ''
 
     include_tags = [request.form['include_tags']]
@@ -61,13 +56,9 @@ def find_random_recipe():
     recipe_ids = ', '.join(str(recipe['id']) for recipe in recipes)  # Tariflerin ID'lerini alır
     recipes_details = sp.get_multi_recipe_details(recipe_ids)  # ID si gelen tariflerin detaylarını getirir
 
+    # Tarif detaylarını çevir ve listeye ekle
     for details in recipes_details:
-        details['title'] = dl.translate(details['title'], 'EN', 'TR')
-
-        soup = BeautifulSoup(details['summary'], "html.parser")
-        summary_text = soup.get_text(separator="\n")
-        details['summary'] = dl.translate(summary_text, 'EN', 'TR')
-
+        details = dl.translate_recipe_details(details, 'EN', 'TR')
         finded_recipes_details.append(details)
 
     return render_template('recipes.html', recipes=finded_recipes_details)
@@ -76,52 +67,39 @@ def find_random_recipe():
 # Tarif detayları sayfası
 @app.route('/recipe_details/<int:recipe_id>')
 def recipe_details(recipe_id):
-    recipe_id = int(recipe_id)
     global finded_recipes_details, translated_recipes
+
     recipe_details = None
     translated = False
+    recipe_id = int(recipe_id)
 
-    # İlgili tarifin detaylarını bul
-    for recipe in finded_recipes_details:
-        if recipe['id'] == recipe_id:
-            recipe_details = recipe.copy()
-            break
-
-    # İlgili tarifin çevirilmiş detaylarını bul
+    # Tarif daha önce çevrildiyse çevrilen tarifi getir
     for recipe in translated_recipes:
         if recipe['id'] == recipe_id:
             recipe_details = recipe.copy()
             translated = True
             break
 
-    if recipe_details is None:
-        return "Tarif bulunamadı", 404
-
-    # Tarif daha önce çevrildiyse tekrar çevirme
     if translated:
         return render_template('recipe_details.html', recipe_details=recipe_details)
 
-    # Malzeme açıklamalarını çevir
-    for ingredient in recipe_details.get('extendedIngredients', []):
-        ingredient['original'] = dl.translate(ingredient['original'], 'EN', 'TR')
+    # Tarif daha önce çevrilmemişse çevir
+    for recipe in finded_recipes_details:
+        if recipe['id'] == recipe_id:
+            recipe_details = recipe.copy()
+            break
 
-    # Tarif adımlarını çevir
-    if 'instructions' in recipe_details and recipe_details['instructions']:
-        soup = BeautifulSoup(recipe_details['instructions'], "html.parser")
-        instructions_text = soup.get_text(separator="\n")
-        recipe_details['instructions'] = dl.translate(instructions_text, 'EN', 'TR')
+    if recipe_details is None:
+        return "Tarif bulunamadı", 404
 
-    # Tarif adımlarını çevir
+    # Tarif detaylarını çevir
+    recipe_details = dl.translate_recipe_instructions(recipe_details, 'EN', 'TR')
+
+    # Tarif adımlarını getir ve çevir
     analyzed_instructions = sp.get_analyzed_recipe_instructions(recipe_details['id'])
+    analyzed_instructions = dl.translate_analyzed_instructions(analyzed_instructions, 'EN', 'TR')
 
-    analyzed_instructions[0]['name'] = dl.translate(analyzed_instructions[0]['name'], 'EN', 'TR')
-    for instruction in analyzed_instructions[0]['steps']:
-        instruction['step'] = dl.translate(instruction['step'], 'EN', 'TR')
-        for equipment in instruction['equipment']:
-            equipment['name'] = dl.translate(equipment['name'], 'EN', 'TR')
-        for ingredient in instruction['ingredients']:
-            ingredient['name'] = dl.translate(ingredient['name'], 'EN', 'TR')
-
+    # çeviriyi tarife ekle
     recipe_details["analyzedInstructions"] = analyzed_instructions
 
     # Tarifin daha önce çevrildiğini belirt
