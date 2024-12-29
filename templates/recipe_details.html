@@ -185,37 +185,39 @@
         <div class="recipe-ingredients">
             <h3>Malzemeler:</h3>
             {% if recipe_details['extendedIngredients'] and recipe_details['extendedIngredients']|length > 0 %}
-                {% for ingredient in recipe_details['extendedIngredients'] %}
-                    <div class="ingredient-card">
-                        {% if ingredient['image'] %}
-                            <img src="https://spoonacular.com/cdn/ingredients_100x100/{{ ingredient['image'] }}" alt="{{ ingredient['name'] }}">
-                        {% endif %}
-                        <span>{{ ingredient['original'] }}</span>
-                    </div>
-                {% endfor %}
+            {% for ingredient in recipe_details['extendedIngredients'] %}
+            <div class="ingredient-card">
+                {% if ingredient['image'] %}
+                <img src="https://spoonacular.com/cdn/ingredients_100x100/{{ ingredient['image'] }}"
+                     alt="{{ ingredient['name'] }}">
+                {% endif %}
+                <span>{{ ingredient['original'] }}</span>
+            </div>
+            {% endfor %}
             {% else %}
-                <p>Malzeme bilgisi bulunamadı.</p>
+            <p>Malzeme bilgisi bulunamadı.</p>
             {% endif %}
         </div>
 
         <div class="recipe-instructions">
             <h3>Yapılışı:</h3>
             {% if recipe_details['analyzedInstructions'] and recipe_details['analyzedInstructions']|length > 0 %}
-                {% for instruction in recipe_details['analyzedInstructions'] %}
-                    {% for step in instruction['steps'] %}
-                        <div class="instruction-card">
-                            {% if step['image'] %}
-                                <img src="{{ step['image'] }}" alt="Adım Görseli">
-                            {% endif %}
-                            <div class="instruction-card-content">
-                                <h4>Adım {{ step['number'] }}</h4>
-                                <p>{{ step['step'] | replace("Step", "Adım") }}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endfor %}
+            {% for instruction in recipe_details['analyzedInstructions'] %}
+            {% for step in instruction['steps'] %}
+            <div class="instruction-card">
+                {% if step['image'] %}
+                <img src="{{ step['image'] }}" alt="Adım Görseli">
+                {% endif %}
+                <div class="instruction-card-content">
+                    <h4>Adım {{ step['number'] }}</h4>
+                    <p>{{ step['step'] | replace("Step", "Adım") }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
             {% else %}
-                <p>{{ recipe_details['instructions'] if recipe_details['instructions'] else 'Yapılış adımları bulunamadı.' }}</p>
+            <p>{{ recipe_details['instructions'] if recipe_details['instructions'] else 'Yapılış adımları bulunamadı.'
+                }}</p>
             {% endif %}
         </div>
 
