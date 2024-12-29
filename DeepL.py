@@ -28,7 +28,7 @@ def translate(text, source_lang, target_lang):
 
 
 # Tarif detaylarını çevir
-def translate_recipe_details(details, source_lang, target_lang):
+def translate_recipe_details(details):
     # Tarif başlığını çevir
     details['title'] = translate(details['title'], 'EN', 'TR')
 
@@ -50,15 +50,16 @@ def _translate_api(api_key, text, source_lang, target_lang):
         response = translator.translate_text(text, source_lang=source_lang, target_lang=target_lang)
         return response.text  # Çeviriyi döndür
     except deepl.DeepLException as e:
-        """# Kota limiti aşıldığında veya başka bir hata olduğunda burası çalışır
+        # Kota limiti aşıldığında veya başka bir hata olduğunda burası çalışır
         if "quota exceeded" in str(e).lower():
-            print("Kota bitti veya kota sınırına yaklaşıldı.")
+            #print("Kota bitti veya kota sınırına yaklaşıldı.")
+            pass
         else:
-            #print(f"Hata: {e}")"""
+            print(f"Hata: {e}")
         return None
 
 
-def translate_recipe_instructions(recipe_details, source_lang, target_lang):
+def translate_recipe_instructions(recipe_details):
     # Malzeme açıklamalarını çevir
     for ingredient in recipe_details.get('extendedIngredients', []):
         ingredient['original'] = translate(ingredient['original'], 'EN', 'TR')
@@ -72,7 +73,7 @@ def translate_recipe_instructions(recipe_details, source_lang, target_lang):
     return recipe_details
 
 
-def translate_analyzed_instructions(analyzed_instructions, source_lang, target_lang):
+def translate_analyzed_instructions(analyzed_instructions):
     # Tarif adımlarını çevir
     analyzed_instructions[0]['name'] = translate(analyzed_instructions[0]['name'], 'EN', 'TR')
     for instruction in analyzed_instructions[0]['steps']:
