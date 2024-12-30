@@ -67,9 +67,9 @@ def show_recipe_details():
                 break
         else:
             # Tarif daha önce çevrilmemişse çevir
-            recipe = dl.translate_recipe_instructions(recipe, 'EN', 'TR')
+            recipe = dl.translate_recipe_instructions(recipe)
             analyzed_instructions = sp.get_analyzed_recipe_instructions(recipe['id'])
-            analyzed_instructions = dl.translate_analyzed_instructions(analyzed_instructions, 'EN', 'TR')
+            analyzed_instructions = dl.translate_analyzed_instructions(analyzed_instructions)
             recipe['analyzedInstructions'] = analyzed_instructions
             translated_recipes.append(recipe)
 

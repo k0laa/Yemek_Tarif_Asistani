@@ -26,6 +26,7 @@ def find_recipe():
     global finded_recipes_details, ingredients
 
     ingredients_form = request.form['ingredients']  # Formdan gelen malzemeleri alır
+    print(ingredients_form)
 
     if ingredients_form != ingredients:  # sayfa yenilendiğinde aynı malzemeleri tekrar aramamak için kontrol
         finded_recipes_details.clear()
@@ -37,7 +38,7 @@ def find_recipe():
 
         # Tarif detaylarını çevir ve listeye ekle
         for details in recipes_details:
-            details = dl.translate_recipe_details(details, 'EN', 'TR')
+            details = dl.translate_recipe_details(details)
             finded_recipes_details.append(details)
 
     return render_template('recipes.html', recipes=finded_recipes_details)
@@ -58,7 +59,7 @@ def find_random_recipe():
 
     # Tarif detaylarını çevir ve listeye ekle
     for details in recipes_details:
-        details = dl.translate_recipe_details(details, 'EN', 'TR')
+        details = dl.translate_recipe_details(details)
         finded_recipes_details.append(details)
 
     return render_template('recipes.html', recipes=finded_recipes_details)
@@ -93,11 +94,11 @@ def recipe_details(recipe_id):
         return "Tarif bulunamadı", 404
 
     # Tarif detaylarını çevir
-    recipe_details = dl.translate_recipe_instructions(recipe_details, 'EN', 'TR')
+    recipe_details = dl.translate_recipe_instructions(recipe_details)
 
     # Tarif adımlarını getir ve çevir
     analyzed_instructions = sp.get_analyzed_recipe_instructions(recipe_details['id'])
-    analyzed_instructions = dl.translate_analyzed_instructions(analyzed_instructions, 'EN', 'TR')
+    analyzed_instructions = dl.translate_analyzed_instructions(analyzed_instructions)
 
     # çeviriyi tarife ekle
     recipe_details["analyzedInstructions"] = analyzed_instructions
