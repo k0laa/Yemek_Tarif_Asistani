@@ -22,7 +22,7 @@ def list_recipes():
 
         # Tarif detaylarını çevir ve listeye ekle
         for details in recipes_details:
-            details = dl.translate_recipe_details(details, 'EN', 'TR')
+            details = dl.translate_recipe_details(details)
             finded_recipes_details.append(details)
 
     sp.print_recipe_id(finded_recipes_details)
@@ -43,7 +43,7 @@ def random_recipe():
 
     # Tarif detaylarını çevir ve listeye ekle
     for details in recipes_details:
-        details = dl.translate_recipe_details(details, 'EN', 'TR')
+        details = dl.translate_recipe_details(details)
         finded_recipes_details.append(details)
 
     sp.print_recipe_id(finded_recipes_details)
@@ -62,7 +62,7 @@ def show_recipe_details():
 
         # Tarif daha önce çevrildiyse çeviriyi kullan
         for translated_recipe in translated_recipes:
-            if translated_recipe['id'] == recipe['id']:
+            if translated_recipe['id'] == recipe_id:
                 recipe = translated_recipe
                 break
         else:
