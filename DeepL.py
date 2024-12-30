@@ -40,25 +40,6 @@ def translate_recipe_details(details):
     return details
 
 
-# DeepL API'ye çeviri isteği gönder
-def _translate_api(api_key, text, source_lang, target_lang):
-    # API'yi başlat
-    translator = deepl.Translator(api_key)
-
-    try:
-        # API'ye çeviri isteği gönder
-        response = translator.translate_text(text, source_lang=source_lang, target_lang=target_lang)
-        return response.text  # Çeviriyi döndür
-    except deepl.DeepLException as e:
-        # Kota limiti aşıldığında veya başka bir hata olduğunda burası çalışır
-        if "quota exceeded" in str(e).lower():
-            #print("Kota bitti veya kota sınırına yaklaşıldı.")
-            pass
-        else:
-            print(f"Hata: {e}")
-        return None
-
-
 def translate_recipe_instructions(recipe_details):
     # Malzeme açıklamalarını çevir
     for ingredient in recipe_details.get('extendedIngredients', []):
@@ -83,6 +64,25 @@ def translate_analyzed_instructions(analyzed_instructions):
         for ingredient in instruction['ingredients']:
             ingredient['name'] = translate(ingredient['name'], 'EN', 'TR')
     return analyzed_instructions
+
+
+# DeepL API'ye çeviri isteği gönder
+def _translate_api(api_key, text, source_lang, target_lang):
+    # API'yi başlat
+    translator = deepl.Translator(api_key)
+
+    try:
+        # API'ye çeviri isteği gönder
+        response = translator.translate_text(text, source_lang=source_lang, target_lang=target_lang)
+        return response.text  # Çeviriyi döndür
+    except deepl.DeepLException as e:
+        # Kota limiti aşıldığında veya başka bir hata olduğunda burası çalışır
+        if "quota exceeded" in str(e).lower():
+            # print("Kota bitti veya kota sınırına yaklaşıldı.")
+            pass
+        else:
+            print(f"Hata: {e}")
+        return None
 
 
 # API anahtarlarını yükle
