@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Dinamik tarif başlığını sayfanın başlığı olarak ayarlıyoruz -->
     <title>{{ recipe_details['title'] }} Tarifi</title>
     <style>
+        /* Sayfanın genel stili */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -13,12 +15,14 @@
             min-height: 100vh;
         }
 
+        /* Başlık stilini tanımlıyoruz */
         h1 {
             text-align: center;
             margin: 20px;
             color: white;
         }
 
+        /* Tarif konteynerinin düzeni */
         .recipe-container {
             display: flex;
             flex-direction: column;
@@ -26,6 +30,7 @@
             padding: 20px;
         }
 
+        /* Tarif görseli için stil */
         .recipe-image {
             position: relative;
             display: inline-block;
@@ -42,6 +47,7 @@
             border-radius: 8px;
         }
 
+        /* Tarif detayları için stil */
         .recipe-details {
             background-color: white;
             border-radius: 8px;
@@ -52,6 +58,7 @@
             text-align: left;
         }
 
+        /* Malzemeler için başlık ve kartlar */
         .recipe-ingredients {
             margin-top: 20px;
         }
@@ -79,6 +86,7 @@
             color: #333;
         }
 
+        /* Yapılış adımları için stil */
         .recipe-instructions {
             margin-top: 20px;
         }
@@ -89,7 +97,7 @@
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 8px; /* Boşluk azaltıldı */
+            margin-bottom: 8px;
             padding: 15px;
         }
 
@@ -117,12 +125,14 @@
             line-height: 1.6;
         }
 
+        /* Tarif genel bilgileri */
         .recipe-info p {
             font-size: 1.1em;
             color: #333;
             margin: 10px 0;
         }
 
+        /* Butonların stilini tanımlıyoruz */
         .view-recipe-btn {
             padding: 10px 20px;
             background-color: #FB9EC6;
@@ -138,14 +148,15 @@
             background-color: #FFCCE1;
         }
 
+        /* Geri Dön butonu */
         .backButton {
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 5px;
-            position: absolute; /* Absolute positioning for the card */
-            top: 10px; /* Distance from the top */
-            left: 10px; /* Distance from the left */
+            position: absolute;
+            top: 10px;
+            left: 10px;
             z-index: 1;
         }
 
@@ -165,29 +176,34 @@
 </head>
 <body>
 <div class="backButton">
-
+    <!-- Kullanıcıyı bir önceki sayfaya yönlendiren buton -->
     <button id="backButton" onclick="window.history.back()">Geri Dön</button>
 </div>
 <div class="recipe-container">
+    <!-- Tarif başlığı dinamik olarak ekleniyor -->
     <h1>{{ recipe_details['title'] }}</h1>
 
+    <!-- Tarifin görselini gösteren bölüm -->
     <div class="recipe-image">
         <img src="{{ recipe_details['image'] }}" alt="{{ recipe_details['title'] }}">
     </div>
 
     <div class="recipe-details">
 
+        <!-- Tarif hakkında kısa bilgiler (kişi sayısı ve süre) -->
         <div class="recipe-info">
             <p><strong>Kişi Sayısı:</strong> {{ recipe_details['servings'] }}</p>
             <p><strong>Hazırlık Süresi:</strong> {{ recipe_details['readyInMinutes'] }} dakika</p>
         </div>
 
+        <!-- Malzeme listesi -->
         <div class="recipe-ingredients">
             <h3>Malzemeler:</h3>
             {% if recipe_details['extendedIngredients'] and recipe_details['extendedIngredients']|length > 0 %}
             {% for ingredient in recipe_details['extendedIngredients'] %}
             <div class="ingredient-card">
                 {% if ingredient['image'] %}
+                <!-- Malzeme görseli varsa gösteriliyor -->
                 <img src="https://spoonacular.com/cdn/ingredients_100x100/{{ ingredient['image'] }}"
                      alt="{{ ingredient['name'] }}">
                 {% endif %}
@@ -199,6 +215,7 @@
             {% endif %}
         </div>
 
+        <!-- Tarifin yapılış adımları -->
         <div class="recipe-instructions">
             <h3>Yapılışı:</h3>
             {% if recipe_details['analyzedInstructions'] and recipe_details['analyzedInstructions']|length > 0 %}
