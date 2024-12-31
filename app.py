@@ -20,7 +20,7 @@ def random_recipe():
     return render_template('random_recipe.html')
 
 
-# Tarif arama sonuçları sayfası
+# Tarif arama sonuçları sayfasıı
 @app.route('/find_recipe', methods=['POST'])
 def find_recipe():
     global finded_recipes_details, ingredients
