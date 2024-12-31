@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recise Bot</title>
     <style>
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -27,22 +28,22 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 60px; /* Kartlar arasındaki boşluk artırıldı */
+            gap: 60px;
             padding: 30px;
             width: 100%;
             box-sizing: border-box;
         }
 
         .recipe-card {
-            perspective: 1500px; /* Daha geniş bir perspektif sağlanır */
+            perspective: 1500px;
             width: 300px;
             flex: 0 1 300px;
             display: flex;
             justify-content: center;
             min-width: 280px;
             box-sizing: border-box;
-            margin-bottom: 30px; /* Kartların dikey boşluğu korunur */
-            position: relative; /* Her kart kendi içinde bağımsız olur */
+            margin-bottom: 30px;
+            position: relative;
         }
 
         .recipe-inner {
@@ -50,7 +51,7 @@
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.8s;
-            transform-origin: center; /* Kartın dönerken merkezlenmesini sağlar */
+            transform-origin: center;
         }
 
         .recipe-card.flipped .recipe-inner {
@@ -97,7 +98,7 @@
             max-height: 200px;
         }
 
-        .recipe-front h3 {
+        .recipe-front h3 { /
             font-size: 1.2em;
             margin: 20px 0;
         }
@@ -137,9 +138,9 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 5px;
-            position: absolute; /* Absolute positioning for the card */
-            top: 10px; /* Distance from the top */
-            left: 10px; /* Distance from the left */
+            position: absolute;
+            top: 10px;
+            left: 10px;
             z-index: 1;
         }
 
@@ -174,6 +175,7 @@
                 <p class="time">Yapılma Süresi: {{ recipe['readyInMinutes'] }} dakika</p>
                 <div class="recipe-btn-container">
                     <form action="/recipe_details/{{ recipe['id'] }}" method="get" style="display: inline;">
+                         <!--Tarif detaylarına gitmek için form. action URL'si, tarifin ID'si ile dinamik olarak belirleniyor-->
                         <button type="submit" class="recipe-btn">Tarifi Getir</button>
                     </form>
                     <button class="recipe-btn summary-btn">Tarif Özeti</button>
@@ -193,12 +195,13 @@
     document.addEventListener('DOMContentLoaded', () => {
         const cards = document.querySelectorAll('.recipe-card');
         cards.forEach(card => {
+            // butonları seçiyoruz
             const summaryButton = card.querySelector('.summary-btn');
             const flipBackButton = card.querySelector('.flip-back-btn');
             const backContent = card.querySelector('.recipe-back p');
             const cardInner = card.querySelector('.recipe-inner');
 
-            // Kartı çevirerek arka yüzü gösterir
+            // tarif özeti butonuna basarak kartı çevirerek arka yüzü gösterir
             summaryButton.addEventListener('click', () => {
                 card.classList.add('flipped');
                 card.querySelector('.recipe-back').style.height = backContent.scrollHeight + 50 + "px";

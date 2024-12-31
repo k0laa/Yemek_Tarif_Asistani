@@ -202,22 +202,25 @@
 </head>
 <body>
 <div class="backButton">
-
     <button id="backButton" onclick="window.history.back()">Geri Dön</button>
 </div>
+
 <h1>Yemek Tarifi Filtreleme</h1>
+
+
 <div id="recipeDisplay">
     <div class="selected-filters">
-        <!-- Seçilen filtreler burada gösterilecek -->
     </div>
+    <!-- "Tarif Bul" butonuna tıklanıldığında tarif arama fonksiyonu çalışacak -->
     <button onclick="findRecipe()">Tarif Bul</button>
 </div>
 
 <div class="container">
-    <!-- İstenmeyenler -->
+    <!-- İstenmeyenler başlığı altında filtreler -->
     <div class="card">
         <h2>İstenmeyenler</h2>
         <details>
+            <!-- Yemek türü seçimi için checkbox grubu -->
             <summary>Yemek Türü Seçiniz:</summary>
             <div class="checkbox-group" id="excludeMealType">
                 <label><input type="checkbox" value="main Course"> Ana Yemek</label>
@@ -236,6 +239,7 @@
         </details>
 
         <details>
+            <!-- Mutfak türü seçimi için checkbox grubu -->
             <summary>Mutfak Türü Seçiniz:</summary>
             <div class="checkbox-group" id="excludeCuisineType">
                 <label><input type="checkbox" value="african"> Afrika</label>
@@ -269,6 +273,7 @@
         </details>
 
         <details>
+            <!-- Diyet kısıtlamaları seçimi için checkbox grubu -->
             <summary>Diyet Kısıtlamaları Seçiniz:</summary>
             <div class="checkbox-group" id="excludeDietaryRestrictions">
                 <label><input type="checkbox" value="gluten Free"> Glutensiz</label>
@@ -285,10 +290,11 @@
         </details>
     </div>
 
-    <!-- İstenenler -->
+    <!-- İstenilenler başlığı altında filtreler -->
     <div class="card">
         <h2>İstenenler</h2>
         <details>
+            <!-- Yemek türü seçimi için checkbox grubu -->
             <summary>Yemek Türü Seçiniz:</summary>
             <div class="checkbox-group" id="includeMealType">
                 <label><input type="checkbox" value="main Course"> Ana Yemek</label>
@@ -307,6 +313,7 @@
         </details>
 
         <details>
+            <!-- Mutfak türü seçimi için checkbox grubu -->
             <summary>Mutfak Türü Seçiniz:</summary>
             <div class="checkbox-group" id="includeCuisineType">
                 <label><input type="checkbox" value="african"> Afrika</label>
@@ -340,6 +347,7 @@
         </details>
 
         <details>
+            <!-- Diyet kısıtlamaları seçimi için checkbox grubu -->
             <summary>Diyet Kısıtlamaları Seçiniz:</summary>
             <div class="checkbox-group" id="includeDietaryRestrictions">
                 <label><input type="checkbox" value="gluten Free"> Glutensiz</label>
@@ -356,10 +364,11 @@
         </details>
     </div>
 
-    <!-- Alerjenler -->
+    <!-- Alerjenler başlığı altında filtreler -->
     <div class="card ">
         <h2>Alerjenler</h2>
         <details>
+            <!-- Alerjen seçimi için checkbox grubu -->
             <summary>Alerjenleri Seçiniz:</summary>
             <div class="checkbox-group" id="intolerances">
                 <label><input type="checkbox" value="dairy"> Süt</label>
@@ -380,14 +389,17 @@
 
 </div>
 
-
 <script>
+    // Checkbox grubundan seçilen değerleri almak için fonksiyon
     function getSelectedValues(checkboxGroup) {
+        // Seçilen tüm checkbox'ları seçer ve NodeList'i bir diziye dönüştürür
         const selectedOptions = Array.from(checkboxGroup.querySelectorAll('input:checked'));
         return selectedOptions.map(option => option.value).join(', ');
     }
 
+    // Seçilen filtrelere göre bir tarif bulma fonksiyonu
     function findRecipe() {
+        // Her filtre grubundan (yemek türü, mutfak türü, diyet kısıtlamaları) seçilen değerleri alır
         const excludeMealType = getSelectedValues(document.getElementById('excludeMealType'));
         const excludeCuisineType = getSelectedValues(document.getElementById('excludeCuisineType'));
         const excludeDietaryRestrictions = getSelectedValues(document.getElementById('excludeDietaryRestrictions'));
@@ -398,124 +410,133 @@
 
         const intolerances = getSelectedValues(document.getElementById('intolerances'));
 
-        // Exclude ve Include Tag'leri oluştur
+        // Hariç tutulacak ve dahil edilecek etiketleri oluşturup seçilen tüm değerleri birleştiriyoruz
         const excludeTags = [excludeMealType, excludeCuisineType, excludeDietaryRestrictions, intolerances]
-            .filter(Boolean) // Boş olanları çıkar
+            .filter(Boolean)
             .join(', ');
 
         const includeTags = [includeMealType, includeCuisineType, includeDietaryRestrictions]
-            .filter(Boolean) // Boş olanları çıkar
+            .filter(Boolean)
             .join(', ');
 
+        // Dinamik olarak form öğesi oluşturuluyor
         const form = document.createElement('form');
-        form.action = '/find_random_recipe';
+        form.action = '/find_random_recipe'; // Formu gönderiyoruz
         form.method = 'post';
 
-        // Gizli inputları oluştur ve forma ekle
+        // Hariç tutulacak etiketler için gizli input oluşturulup forma ekleniyor
         const excludeTagsInput = document.createElement('input');
         excludeTagsInput.type = 'hidden';
         excludeTagsInput.name = 'exclude_tags';
         excludeTagsInput.value = excludeTags;
         form.appendChild(excludeTagsInput);
 
+        // Dahil edilecek etiketler için gizli input oluşturulup forma ekleniyor
         const includeTagsInput = document.createElement('input');
         includeTagsInput.type = 'hidden';
         includeTagsInput.name = 'include_tags';
         includeTagsInput.value = includeTags;
         form.appendChild(includeTagsInput);
 
-        // Formu gönder
+        // Formu belgeye ekleyip gönderiyoruz
         document.body.appendChild(form);
         form.submit();
     }
 
+    // 'card' öğelerinin içindeki her 'details' öğesine event listener ekliyoruz
     document.querySelectorAll('.card details').forEach(detail => {
         detail.addEventListener('toggle', function () {
-            // Reset all cards to default height
+            // Tüm 'card' öğelerinin yüksekliklerini sıfırlıyoruz
             document.querySelectorAll('.card').forEach(card => {
                 card.style.height = "";
             });
 
             if (this.open) {
-                // Close other details
+                // Diğer tüm 'details' öğelerini kapatıyoruz, sadece tıklanan öğe açık kalacak
                 document.querySelectorAll('.card details').forEach(otherDetail => {
                     if (otherDetail !== this) {
                         otherDetail.open = false;
                     }
                 });
 
-                // Only expand the card containing the clicked details
+                // Sadece tıklanan 'details' öğesinin bulunduğu kartı genişletiyoruz
                 this.closest('.card').style.height = "auto";
             }
         });
     });
 
-    let selectedExludeFilters = []; // Bu liste dinamik olarak güncellenebilir
-    let selectedIncludeFilters = []; // Bu liste dinamik olarak güncellenebilir
-    let selectedIntolerancesFilters = []; // Bu liste dinamik olarak güncellenebilir
+    // Seçilen filtreleri dinamik olarak tutmak için diziler
+    let selectedExludeFilters = [];
+    let selectedIncludeFilters = [];
+    let selectedIntolerancesFilters = []; /
 
+    // Seçilen filtreleri sayfada görüntüleme fonksiyonu
     function displayFilters() {
-        const filtersContainer = document.querySelector('.selected-filters');
-        filtersContainer.innerHTML = '';
+        const filtersContainer = document.querySelector('.selected-filters'); //filtreler burada gösterilecek
+        filtersContainer.innerHTML = ''; // Konteyneri her seferinde temizledik
 
+        // Hariç tutulan filtreleri görüntüle
         selectedExludeFilters.forEach(filter => {
             const filterCard = document.createElement('div');
-            filterCard.className = 'exlude-card';
+            filterCard.className = 'exlude-card'; // Filtre kartı için bir div oluşturuyoruz
             filterCard.textContent = filter;
-            filtersContainer.appendChild(filterCard);
+            filtersContainer.appendChild(filterCard); // Kartı konteynere ekliyoruz
         });
 
+        // Dahil edilen filtreleri görüntüle
         selectedIncludeFilters.forEach(filter => {
             const filterCard = document.createElement('div');
-            filterCard.className = 'include-card';
+            filterCard.className = 'include-card'; // Filtre kartı için bir div oluştur
             filterCard.textContent = filter;
             filtersContainer.appendChild(filterCard);
         });
 
+        // İntolerans filtrelerini görüntüle
         selectedIntolerancesFilters.forEach(filter => {
             const filterCard = document.createElement('div');
-            filterCard.className = 'intolerances-card';
+            filterCard.className = 'intolerances-card'; // Filtre kartı için bir div oluştur
             filterCard.textContent = filter;
             filtersContainer.appendChild(filterCard);
         });
     }
 
-
+    // Checkbox'lar için event listener ekleme
     const ExludeCheckboxes = document.querySelectorAll('#excludeMealType input, #excludeCuisineType input, #excludeDietaryRestrictions input');
     const IncludeCheckboxes = document.querySelectorAll('#includeMealType input, #includeCuisineType input, #includeDietaryRestrictions input');
     const IntolerancesCheckboxes = document.querySelectorAll('#intolerances input');
 
+    // Hariç tutulan filtreler için checkbox'lar
     ExludeCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
             if (checkbox.checked)
-                selectedExludeFilters.push(checkbox.parentElement.textContent.trim());
+                selectedExludeFilters.push(checkbox.parentElement.textContent.trim()); // Checkbox işaretlendiğinde filtreyi ekle
             else
-                // Filtre seçimi kaldırıldıysa listeden çıkar
+                // Checkbox işareti kaldırıldığında, filtreyi listeden çıkartmak için
                 selectedExludeFilters = selectedExludeFilters.filter(filter => filter !== checkbox.parentElement.textContent.trim());
-            displayFilters();
+            displayFilters(); // Filtreleri günceller
         });
     });
 
+    // Dahil edilen filtreler için checkbox'lar
     IncludeCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
             if (checkbox.checked)
-                selectedIncludeFilters.push(checkbox.parentElement.textContent.trim());
+                selectedIncludeFilters.push(checkbox.parentElement.textContent.trim()); // Checkbox işaretlendiğinde filtreyi ekle
             else
-                // Filtre seçimi kaldırıldıysa listeden çıkar
                 selectedIncludeFilters = selectedIncludeFilters.filter(filter => filter !== checkbox.parentElement.textContent.trim());
             displayFilters();
         });
     });
 
+    // İntolerans filtreleri için checkbox'lar
     IntolerancesCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
-
             if (checkbox.checked)
-                selectedIntolerancesFilters.push(checkbox.parentElement.textContent.trim());
+                selectedIntolerancesFilters.push(checkbox.parentElement.textContent.trim()); // Checkbox işaretlendiğinde filtreyi ekle
             else
-                // Filtre seçimi kaldırıldıysa listeden çıkar
+                // Checkbox işareti kaldırıldığında, filtreyi listeden çıkar
                 selectedIntolerancesFilters = selectedIntolerancesFilters.filter(filter => filter !== checkbox.parentElement.textContent.trim());
-            displayFilters();
+            displayFilters(); // Filtreleri güncelle
         });
     });
 
