@@ -201,7 +201,7 @@
             const backContent = card.querySelector('.recipe-back p');
             const cardInner = card.querySelector('.recipe-inner');
 
-            // tarif özeti butonuna basarak kartı çevirerek arka yüzü gösterir
+            // tarif özeti butonuna basınca kartı çevirerek arka yüzü gösterir
             summaryButton.addEventListener('click', () => {
                 card.classList.add('flipped');
                 card.querySelector('.recipe-back').style.height = backContent.scrollHeight + 50 + "px";
