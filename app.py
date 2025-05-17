@@ -48,7 +48,7 @@ def find_recipe():
 @app.route('/find_random_recipe', methods=['POST'])
 def find_random_recipe():
     global finded_recipes_details, ingredients
-    finded_recipes_details.clear();
+    finded_recipes_details.clear()
     ingredients = ''
 
     include_tags = [request.form['include_tags']]
